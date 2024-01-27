@@ -1,0 +1,51 @@
+# SOME DESCRIPTIVE TITLE.
+# This file is put in the public domain.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# Translators:
+# Franck Paul <carnet.franck.paul@gmail.com>, 2024
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Dotclear 2 pingBluesky module\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-26 10:10+0100\n"
+"PO-Revision-Date: 2023-05-18 13:09+0000\n"
+"Last-Translator: Franck Paul <carnet.franck.paul@gmail.com>, 2024\n"
+"Language-Team: French (https://app.transifex.com/open-time/teams/109573/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+msgid "Ping Bluesky"
+msgstr "Ping Bluesky"
+
+msgid "pingBluesky"
+msgstr "pingBluesky"
+
+msgid "Bluesky"
+msgstr "Bluesky"
+
+msgid "All entries have been ping to Bluesky."
+msgstr "Toutes les entrées ont été signalées sur Bluesky."
+
+msgid "Activate pingBluesky plugin"
+msgstr "Activer le plugin pingBluesky"
+
+msgid "Bluesky instance:"
+msgstr "Instance Bluesky :"
+
+msgid "Application token:"
+msgstr "Jeton applicatif :"
+
+msgid "Status prefix:"
+msgstr "Préfixe de statut :"
+
+msgid "Include tags"
+msgstr "Inclure les mots-clés"
+
+msgid "Save"
+msgstr "Enregistrer"
