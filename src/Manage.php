@@ -155,6 +155,9 @@ class Manage extends Process
                     (new Checkbox('pb_tags', (bool) $settings->tags))
                         ->value(1)
                         ->label((new Label(__('Include tags'), Label::INSIDE_TEXT_AFTER))),
+                    (new Note())
+                        ->class('form-note')
+                        ->text(__('The tags, inserted as hashtags are currently not recognized on Bluesky.')),
                 ]),
                 // Submit
                 (new Para())->items([
