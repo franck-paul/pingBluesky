@@ -88,6 +88,8 @@ class Helper
                     $rs = $blog->getPosts(['post_id' => $ids]);
                     $rs->extend(Post::class);
                     while ($rs->fetch()) {
+                        $url = $rs->getURL();
+
                         $elements = [];
                         // Prefix
                         if (!empty($prefix)) {
@@ -106,7 +108,7 @@ class Helper
                             $elements[] = implode(' ', $tags);
                         }
                         // URL
-                        $elements[] = $rs->getURL();
+                        $elements[] = $url;
 
                         // Compose message
                         $message = implode(' ', $elements);
@@ -118,6 +120,18 @@ class Helper
                                 '$type'     => 'app.bsky.feed.post',
                                 'createdAt' => date('c'),
                                 'text'      => $message,
+                                'facets'    => [
+                                    'index' => [
+                                        'byteStart' => strpos($message, 'https:'),
+                                        'byteEnd'   => strpos($message, 'https:') + strlen($url),
+                                    ],
+                                    'features' => [
+                                        [
+                                            'uri'   => $url,
+                                            '$type' => 'app.bsky.richtext.facet#link',
+                                        ],
+                                    ],
+                                ],
                             ],
                         ];
 
