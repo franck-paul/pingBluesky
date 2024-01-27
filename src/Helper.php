@@ -34,6 +34,10 @@ class Helper
             return '';
         }
 
+        if (!function_exists('curl_version')) {
+            return '';
+        }
+
         $instance = $settings->instance;
         $account  = $settings->account;
         $token    = $settings->token;
@@ -49,6 +53,7 @@ class Helper
             $instance = 'https://' . $instance;
         }
 
+        // First step, create a new session
         $payload = [
             'identifier' => $account,
             'password'   => $token,
@@ -72,71 +77,71 @@ class Helper
         $response = curl_exec($curl);
         curl_close($curl);
 
-        // First step, create a new session
         if ($response !== false) {
             $session = json_decode($response, true);
+            if (!is_null($session)) {
+                $uri = rtrim($instance, '/') . '/xrpc/com.atproto.repo.createRecord';
 
-            $uri = rtrim($instance, '/') . '/xrpc/com.atproto.repo.createRecord';
-
-            // Second step, post entries
-            try {
-                // Get posts information
-                $rs = $blog->getPosts(['post_id' => $ids]);
-                $rs->extend(Post::class);
-                while ($rs->fetch()) {
-                    $elements = [];
-                    // Prefix
-                    if (!empty($prefix)) {
-                        $elements[] = $prefix;
-                    }
-                    // Title
-                    $elements[] = $rs->post_title;
-                    // Tags
-                    if ($addtags) {
-                        $tags = [];
-                        $meta = App::meta()->getMetaRecordset($rs->post_meta, 'tag');
-                        $meta->sort('meta_id_lower', 'asc');
-                        while ($meta->fetch()) {
-                            $tags[] = '#' . $meta->meta_id;
+                // Second step, post entries
+                try {
+                    // Get posts information
+                    $rs = $blog->getPosts(['post_id' => $ids]);
+                    $rs->extend(Post::class);
+                    while ($rs->fetch()) {
+                        $elements = [];
+                        // Prefix
+                        if (!empty($prefix)) {
+                            $elements[] = $prefix;
                         }
-                        $elements[] = implode(' ', $tags);
+                        // Title
+                        $elements[] = $rs->post_title;
+                        // Tags
+                        if ($addtags) {
+                            $tags = [];
+                            $meta = App::meta()->getMetaRecordset($rs->post_meta, 'tag');
+                            $meta->sort('meta_id_lower', 'asc');
+                            while ($meta->fetch()) {
+                                $tags[] = '#' . $meta->meta_id;
+                            }
+                            $elements[] = implode(' ', $tags);
+                        }
+                        // URL
+                        $elements[] = $rs->getURL();
+
+                        // Compose message
+                        $message = implode(' ', $elements);
+
+                        $payload = [
+                            'repo'       => $session['did'],
+                            'collection' => 'app.bsky.feed.post',
+                            'record'     => [
+                                '$type'     => 'app.bsky.feed.post',
+                                'createdAt' => date('c'),
+                                'text'      => $message,
+                            ],
+                        ];
+
+                        $curl = curl_init();
+                        curl_setopt_array($curl, [
+                            CURLOPT_URL            => $uri,
+                            CURLOPT_RETURNTRANSFER => true,
+                            CURLOPT_ENCODING       => '',
+                            CURLOPT_MAXREDIRS      => 10,
+                            CURLOPT_TIMEOUT        => 0,
+                            CURLOPT_FOLLOWLOCATION => true,
+                            CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
+                            CURLOPT_CUSTOMREQUEST  => 'POST',
+                            CURLOPT_POSTFIELDS     => json_encode($payload, JSON_HEX_TAG | JSON_UNESCAPED_SLASHES),
+                            CURLOPT_HTTPHEADER     => [
+                                'Content-Type: application/json',
+                                'Authorization: Bearer ' . $session['accessJwt'],
+                            ],
+                        ]);
+                        $response = curl_exec($curl);
+                        curl_close($curl);
                     }
-                    // URL
-                    $elements[] = $rs->getURL();
-
-                    // Compose message
-                    $message = implode(' ', $elements);
-
-                    $payload = [
-                        'repo'       => $session['did'],
-                        'collection' => 'app.bsky.feed.post',
-                        'record'     => [
-                            '$type'     => 'app.bsky.feed.post',
-                            'createdAt' => date('c'),
-                            'text'      => $message,
-                        ],
-                    ];
-
-                    $curl = curl_init();
-                    curl_setopt_array($curl, [
-                        CURLOPT_URL            => $uri,
-                        CURLOPT_RETURNTRANSFER => true,
-                        CURLOPT_ENCODING       => '',
-                        CURLOPT_MAXREDIRS      => 10,
-                        CURLOPT_TIMEOUT        => 0,
-                        CURLOPT_FOLLOWLOCATION => true,
-                        CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
-                        CURLOPT_CUSTOMREQUEST  => 'POST',
-                        CURLOPT_POSTFIELDS     => json_encode($payload, JSON_HEX_TAG | JSON_UNESCAPED_SLASHES),
-                        CURLOPT_HTTPHEADER     => [
-                            'Content-Type: application/json',
-                            'Authorization: Bearer ' . $session['accessJwt'],
-                        ],
-                    ]);
-                    $response = curl_exec($curl);
-                    curl_close($curl);
+                } catch (Exception) {
                 }
-            } catch (Exception) {
             }
         }
 

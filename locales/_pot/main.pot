@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dotclear 2 pingBluesky module\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-26 10:10+0100\n"
+"POT-Creation-Date: 2024-01-27 18:04+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 #: ../git-plugins/pingBluesky/src/Backend.php:25
 #: ../git-plugins/pingBluesky/src/BackendBehaviors.php:32
 #: ../git-plugins/pingBluesky/src/BackendBehaviors.php:47
-#: ../git-plugins/pingBluesky/src/Manage.php:89
+#: ../git-plugins/pingBluesky/src/Manage.php:91
 msgid "Ping Bluesky"
 msgstr ""
 
@@ -36,26 +36,43 @@ msgstr ""
 msgid "All entries have been ping to Bluesky."
 msgstr ""
 
-#: ../git-plugins/pingBluesky/src/Manage.php:103
+#: ../git-plugins/pingBluesky/src/Manage.php:105
 msgid "Activate pingBluesky plugin"
 msgstr ""
 
-#: ../git-plugins/pingBluesky/src/Manage.php:112
+#: ../git-plugins/pingBluesky/src/Manage.php:109
+#, php-format
+msgid "The mandatory cURL library is <strong>%s</strong>."
+msgstr ""
+
+#: ../git-plugins/pingBluesky/src/Manage.php:110
+msgid "installed and enabled"
+msgstr ""
+
+#: ../git-plugins/pingBluesky/src/Manage.php:110
+msgid "missing or disabled"
+msgstr ""
+
+#: ../git-plugins/pingBluesky/src/Manage.php:120
 msgid "Bluesky instance:"
 msgstr ""
 
-#: ../git-plugins/pingBluesky/src/Manage.php:123
+#: ../git-plugins/pingBluesky/src/Manage.php:131
+msgid "Account handle:"
+msgstr ""
+
+#: ../git-plugins/pingBluesky/src/Manage.php:142
 msgid "Application token:"
 msgstr ""
 
-#: ../git-plugins/pingBluesky/src/Manage.php:133
+#: ../git-plugins/pingBluesky/src/Manage.php:152
 msgid "Status prefix:"
 msgstr ""
 
-#: ../git-plugins/pingBluesky/src/Manage.php:138
+#: ../git-plugins/pingBluesky/src/Manage.php:157
 msgid "Include tags"
 msgstr ""
 
-#: ../git-plugins/pingBluesky/src/Manage.php:143
+#: ../git-plugins/pingBluesky/src/Manage.php:162
 msgid "Save"
 msgstr ""

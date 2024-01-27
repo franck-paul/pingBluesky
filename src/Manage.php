@@ -22,6 +22,7 @@ use Dotclear\Helper\Html\Form\Checkbox;
 use Dotclear\Helper\Html\Form\Form;
 use Dotclear\Helper\Html\Form\Input;
 use Dotclear\Helper\Html\Form\Label;
+use Dotclear\Helper\Html\Form\Note;
 use Dotclear\Helper\Html\Form\Para;
 use Dotclear\Helper\Html\Form\Submit;
 use Dotclear\Helper\Html\Form\Text;
@@ -102,6 +103,12 @@ class Manage extends Process
                     (new Checkbox('pb_active', (bool) $settings->active))
                         ->value(1)
                         ->label((new Label(__('Activate pingBluesky plugin'), Label::INSIDE_TEXT_AFTER))),
+                    (new Note())
+                        ->class('form-note')
+                        ->text(sprintf(
+                            __('The mandatory cURL library is <strong>%s</strong>.'),
+                            function_exists('curl_version') ? __('installed and enabled') : __('missing or disabled')
+                        )),
                 ]),
                 (new Para())->items([
                     (new Input('pb_instance'))
