@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dotclear 2 pingBluesky module\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-27 18:04+0100\n"
+"POT-Creation-Date: 2024-01-27 18:31+0100\n"
 "PO-Revision-Date: 2024-01-27 14:52+0000\n"
 "Last-Translator: Franck Paul <carnet.franck.paul@gmail.com>, 2024\n"
 "Language-Team: French (https://app.transifex.com/open-time/teams/109573/fr/)\n"
@@ -37,7 +37,7 @@ msgstr "Activer le plugin pingBluesky"
 
 #, php-format
 msgid "The mandatory cURL library is <strong>%s</strong>."
-msgstr "La bibliothèque cURL est %s"
+msgstr "La bibliothèque cURL est <strong>%s</strong>."
 
 msgid "installed and enabled"
 msgstr "installée et activée"
@@ -59,6 +59,12 @@ msgstr "Préfixe de statut :"
 
 msgid "Include tags"
 msgstr "Inclure les mots-clés"
+
+msgid ""
+"The tags, inserted as hashtags are currently not recognized on Bluesky."
+msgstr ""
+"Les mots-clés, insérés en tant que hashtags/mots-dièse, ne sont actuellement"
+" pas reconnus sur Bluesky."
 
 msgid "Save"
 msgstr "Enregistrer"
