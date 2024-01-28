@@ -1,7 +1,7 @@
 <modules xmlns:da="http://dotaddict.org/da/">
   <module id="pingBluesky">
     <name>pingBluesky</name>
-    <version>4.3</version>
+    <version>1.0</version>
     <author>Franck Paul</author>
     <desc>Pre-installation Check</desc>
     <file>https://github.com/franck-paul/pingBluesky/releases/download/4.3/plugin-pingBluesky-1.0.zip</file>
