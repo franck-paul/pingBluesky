@@ -136,6 +136,7 @@ class Helper
                                         ],
                                     ],
                                 ],
+                                // Here should come the embed in the future… (see https://atproto.com/blog/create-post#website-card-embeds)
                             ],
                         ];
 
