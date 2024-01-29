@@ -107,11 +107,13 @@ class Helper
                             }
                             $elements[] = implode(' ', $tags);
                         }
-                        // URL
-                        $elements[] = $url;
 
                         // Compose message
-                        $message = implode(' ', $elements);
+                        $message = implode(' ', $elements) . ' ';
+
+                        // Add URL
+                        $start = strlen($message);
+                        $message .= $url;
 
                         $payload = [
                             'repo'       => $session['did'],
@@ -122,8 +124,8 @@ class Helper
                                 'text'      => $message,
                                 'facets'    => [
                                     'index' => [
-                                        'byteStart' => strpos($message, 'https:'),
-                                        'byteEnd'   => strpos($message, 'https:') + strlen($url),
+                                        'byteStart' => $start,
+                                        'byteEnd'   => $start + strlen($url),
                                     ],
                                     'features' => [
                                         [
