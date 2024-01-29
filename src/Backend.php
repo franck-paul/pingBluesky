@@ -35,14 +35,18 @@ class Backend extends Process
 
         My::addBackendMenuItem(App::backend()->menus()::MENU_BLOG);
 
-        if (App::auth()->check(App::auth()->makePermissions([
-            App::auth()::PERMISSION_CONTENT_ADMIN,
-        ]), App::blog()->id())) {
-            App::behavior()->addBehaviors([
-                /* Add behavior callbacks for posts actions */
-                'adminPostsActions' => BackendBehaviors::adminPostsActions(...),
-                'adminPagesActions' => BackendBehaviors::adminPagesActions(...),
-            ]);
+        $settings = My::settings();
+        if ($settings->active) {
+            // Add posts/pages action
+            if (App::auth()->check(App::auth()->makePermissions([
+                App::auth()::PERMISSION_CONTENT_ADMIN,
+            ]), App::blog()->id())) {
+                App::behavior()->addBehaviors([
+                    /* Add behavior callbacks for posts actions */
+                    'adminPostsActions' => BackendBehaviors::adminPostsActions(...),
+                    'adminPagesActions' => BackendBehaviors::adminPagesActions(...),
+                ]);
+            }
         }
 
         return true;
