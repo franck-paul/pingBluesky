@@ -123,14 +123,16 @@ class Helper
                                 'createdAt' => date('c'),
                                 'text'      => $message,
                                 'facets'    => [
-                                    'index' => [
-                                        'byteStart' => $start,
-                                        'byteEnd'   => $start + strlen($url),
-                                    ],
-                                    'features' => [
-                                        [
-                                            'uri'   => $url,
-                                            '$type' => 'app.bsky.richtext.facet#link',
+                                    [
+                                        'index' => [
+                                            'byteStart' => $start,
+                                            'byteEnd'   => $start + strlen($url),
+                                        ],
+                                        'features' => [
+                                            [
+                                                'uri'   => $url,
+                                                '$type' => 'app.bsky.richtext.facet#link',
+                                            ],
                                         ],
                                     ],
                                 ],
