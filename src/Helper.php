@@ -115,6 +115,12 @@ class Helper
                         $start = strlen($message);
                         $message .= $url;
 
+                        // Get post lang if any else set to blog default lang
+                        $lang = $rs->post_lang;
+                        if ((string) $lang === '') {
+                            $lang = App::blog()->settings()->system->lang;
+                        }
+
                         $payload = [
                             'repo'       => $session['did'],
                             'collection' => 'app.bsky.feed.post',
@@ -122,6 +128,7 @@ class Helper
                                 '$type'     => 'app.bsky.feed.post',
                                 'createdAt' => date('c'),
                                 'text'      => $message,
+                                'langs'     => [$lang],
                                 'facets'    => [
                                     [
                                         'index' => [
