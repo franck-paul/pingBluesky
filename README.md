@@ -26,7 +26,7 @@ Then on the pingBluesky plugin main settings page:
 
 1. Put your **account handle** host (without `https://`), example: `me.bsy.app`
 1. Put your **access token** (see above)
-1. Put a **prefix** which will be inserted at beginning of every statuses (optionnal)
-1. Includes **tags** in statuses (optionnal)
+1. Put a **prefix** which will be inserted at beginning of every statuses (optional)
+1. Includes **tags** in statuses (optional)
 
 Then activate the plugin and save the settings.
