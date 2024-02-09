@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\pingBluesky;
 
+use DOMDocument;
+use DOMXPath;
 use Dotclear\App;
 use Dotclear\Interface\Core\BlogInterface;
 use Dotclear\Schema\Extension\Post;
@@ -50,8 +52,9 @@ class Helper
 
         // Prepare instance URI
         if (!parse_url($instance, PHP_URL_HOST)) {
-            $instance = 'https://' . $instance;
+            $instance = 'https://' . ltrim($instance, '/');
         }
+        $instance = rtrim($instance, '/');
 
         // First step, create a new session
         $payload = [
@@ -61,7 +64,7 @@ class Helper
 
         $curl = curl_init();
         curl_setopt_array($curl, [
-            CURLOPT_URL            => rtrim($instance, '/') . '/xrpc/com.atproto.server.createSession',
+            CURLOPT_URL            => $instance . '/xrpc/com.atproto.server.createSession',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING       => '',
             CURLOPT_MAXREDIRS      => 10,
@@ -80,8 +83,6 @@ class Helper
         if ($response !== false) {
             $session = json_decode($response, true);
             if (!is_null($session)) {
-                $uri = rtrim($instance, '/') . '/xrpc/com.atproto.repo.createRecord';
-
                 // Second step, post entries
                 try {
                     // Get posts information
@@ -143,13 +144,19 @@ class Helper
                                         ],
                                     ],
                                 ],
-                                // Here should come the embed in the future… (see https://atproto.com/blog/create-post#website-card-embeds)
                             ],
                         ];
 
+                        // Try to compose an Entry card
+                        $embed = self::fetchEntry($instance, $session, $url);
+                        if ($embed !== false) {
+                            $payload['record']['embed'] = $embed;
+                        }
+
+                        // Post entry
                         $curl = curl_init();
                         curl_setopt_array($curl, [
-                            CURLOPT_URL            => $uri,
+                            CURLOPT_URL            => $instance . '/xrpc/com.atproto.repo.createRecord',
                             CURLOPT_RETURNTRANSFER => true,
                             CURLOPT_ENCODING       => '',
                             CURLOPT_MAXREDIRS      => 10,
@@ -172,5 +179,162 @@ class Helper
         }
 
         return '';
+    }
+
+    /**
+     * Fetches an entry.
+     *
+     * @param      string      $instance  The Bluesky instance
+     * @param      array       $session   The Current Bluesky session
+     * @param      string      $url       The entry URL
+     *
+     * @return     array|null  The entry card to embed or null on error.
+     */
+    private static function fetchEntry(string $instance, array $session, string $url): ?array
+    {
+        // The required fields for every embed card
+        $card = [
+            'uri'         => $url,
+            'title'       => '',
+            'description' => '',
+        ];
+
+        // Get HTML content
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL            => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER         => false,
+            CURLOPT_CUSTOMREQUEST  => 'GET',
+            CURLOPT_POST           => false,
+            CURLOPT_ENCODING       => '',
+            CURLOPT_MAXREDIRS      => 10,
+            CURLOPT_TIMEOUT        => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
+        ]);
+        $response = curl_exec($curl);
+        curl_close($curl);
+        if ($response === false) {
+            return null;
+        }
+
+        // Create a new DOMDocument
+        $doc = new DOMDocument();
+
+        // Suppress errors for invalid HTML, if needed
+        libxml_use_internal_errors(true);
+
+        // Load the HTML from the URL
+        $doc->loadHTML($response);
+
+        // Restore error handling
+        libxml_use_internal_errors(false);
+
+        // Create a new DOMXPath object for querying the document
+        $xpath = new DOMXPath($doc);
+
+        // Query for "og:title" and "og:description" meta tags
+        $title_tag = $xpath->query('//meta[@property="og:title"]/@content');
+        if ($title_tag->length > 0) {
+            $card['title'] = $title_tag[0]->nodeValue;
+        } else {
+            // Title missing: no card
+            return null;
+        }
+
+        $description_tag = $xpath->query('//meta[@property="og:description"]/@content');
+        if ($description_tag->length > 0) {
+            $card['description'] = $description_tag[0]->nodeValue;
+        } else {
+            // Description missing: no card
+            return null;
+        }
+
+        $embed = [
+            'embed' => [
+                '$type'    => 'app.bsky.embed.external',
+                'external' => [
+                    'uri'         => $card['uri'],
+                    'title'       => $card['title'],
+                    'description' => $card['description'],
+                ],
+            ],
+        ];
+
+        // If there is an "og:image" meta tag, fetch and upload that image
+        $image_tag = $xpath->query('//meta[@property="og:image"]/@content');
+        if ($image_tag->length > 0) {
+            $img_url = $image_tag[0]->nodeValue;
+            $image   = self::uploadMediaToBluesky($instance, $session, $img_url);
+            if ($image !== null) {
+                $embed['embed']['external']['thumb'] = $image;
+            }
+        }
+
+        return $embed;
+    }
+
+    /**
+     * Uploads a media to Bluesky and get thumb to use in embed entry.
+     *
+     * @param      string       $instance  The Bluesky instance
+     * @param      array        $session   The current Bluesky session
+     * @param      string       $img_src   The image URL
+     *
+     * @return     null|string  The thumb image to use in embed entry or null on error
+     */
+    private static function uploadMediaToBluesky(string $instance, array $session, string $img_src): ?string
+    {
+        // Fetch image and get mime type
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL            => $img_src,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER         => false,
+            CURLOPT_CUSTOMREQUEST  => 'GET',
+            CURLOPT_POST           => false,
+            CURLOPT_ENCODING       => '',
+            CURLOPT_MAXREDIRS      => 10,
+            CURLOPT_TIMEOUT        => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
+        ]);
+        $response = curl_exec($curl);
+        $mime     = curl_getinfo($curl, CURLINFO_CONTENT_TYPE);
+        curl_close($curl);
+        if ($response === false) {
+            return null;
+        }
+
+        // upload the file
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL            => $instance . '/xrpc/com.atproto.repo.uploadBlob',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING       => '',
+            CURLOPT_MAXREDIRS      => 10,
+            CURLOPT_TIMEOUT        => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST  => 'POST',
+            CURLOPT_POSTFIELDS     => $response,
+            CURLOPT_HTTPHEADER     => [
+                'Content-Type: ' . $mime,
+                'Authorization: Bearer ' . $session['accessJwt'],
+            ],
+        ]);
+        $response = curl_exec($curl);
+        curl_close($curl);
+        if ($response === false) {
+            return null;
+        }
+
+        $blob_resp = json_decode($response, true);
+        if (is_null($blob_resp)) {
+            return null;
+        }
+
+        return $blob_resp['blob'];
     }
 }
