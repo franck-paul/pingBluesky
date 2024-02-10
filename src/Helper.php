@@ -213,6 +213,9 @@ class Helper
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
         ]);
+        if (App::config()->devMode() === true && App::config()->debugMode() === true) {
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        }
         $response = curl_exec($curl);
         curl_close($curl);
         if ($response === false) {
@@ -300,6 +303,9 @@ class Helper
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
         ]);
+        if (App::config()->devMode() === true && App::config()->debugMode() === true) {
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        }
         $response = curl_exec($curl);
         $mime     = curl_getinfo($curl, CURLINFO_CONTENT_TYPE);
         curl_close($curl);
