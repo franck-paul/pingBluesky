@@ -149,7 +149,7 @@ class Helper
 
                         // Try to compose an Entry card
                         $embed = self::fetchEntry($instance, $session, $url);
-                        if ($embed !== false) {
+                        if ($embed !== null) {
                             $payload['record']['embed'] = $embed;
                         }
 
