@@ -45,6 +45,7 @@ class Helper
         $token    = $settings->token;
         $prefix   = $settings->prefix;
         $addtags  = $settings->tags;
+        $mode     = $settings->tags_mode;
 
         if (empty($instance) || empty($token) || $ids === []) {
             return '';
@@ -104,7 +105,7 @@ class Helper
                             $meta = App::meta()->getMetaRecordset($rs->post_meta, 'tag');
                             $meta->sort('meta_id_lower', 'asc');
                             while ($meta->fetch()) {
-                                $tags[] = '#' . $meta->meta_id;
+                                $tags[] = '#' . self::convertTag($meta->meta_id, $mode);
                             }
                             $elements[] = implode(' ', $tags);
                         }
@@ -179,6 +180,25 @@ class Helper
         }
 
         return '';
+    }
+
+    /**
+     * Convert a tag depending on mode
+     *
+     * @param      string  $tag    The tag
+     * @param      int     $mode   The mode
+     *
+     * @return     string
+     */
+    private static function convertTag(string $tag, int $mode = My::TAGS_MODE_NONE): string
+    {
+        return match ($mode) {
+            My::TAGS_MODE_NOSPACE    => str_replace(' ', '', $tag), // Remove spaces
+            My::TAGS_MODE_PASCALCASE => str_replace(' ', '', ucwords($tag)), // Uppercase each words and remove spaces
+            My::TAGS_MODE_CAMELCASE  => lcfirst(str_replace(' ', '', ucwords($tag))), // Uppercase each words but the first and remove spaces
+            My::TAGS_MODE_NONE       => $tag,
+            default                  => $tag,
+        };
     }
 
     /**

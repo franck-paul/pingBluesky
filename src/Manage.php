@@ -19,11 +19,14 @@ use Dotclear\Core\Backend\Notices;
 use Dotclear\Core\Backend\Page;
 use Dotclear\Core\Process;
 use Dotclear\Helper\Html\Form\Checkbox;
+use Dotclear\Helper\Html\Form\Fieldset;
 use Dotclear\Helper\Html\Form\Form;
 use Dotclear\Helper\Html\Form\Input;
 use Dotclear\Helper\Html\Form\Label;
+use Dotclear\Helper\Html\Form\Legend;
 use Dotclear\Helper\Html\Form\Note;
 use Dotclear\Helper\Html\Form\Para;
+use Dotclear\Helper\Html\Form\Radio;
 use Dotclear\Helper\Html\Form\Submit;
 use Dotclear\Helper\Html\Form\Text;
 use Dotclear\Helper\Html\Html;
@@ -59,6 +62,7 @@ class Manage extends Process
                 $settings->put('token', trim(Html::escapeHTML($_POST['pb_token'])));
                 $settings->put('prefix', trim(Html::escapeHTML($_POST['pb_prefix'])));
                 $settings->put('tags', !empty($_POST['pb_tags']));
+                $settings->put('tags_mode', (int) $_POST['pb_tags_mode'], App::blogWorkspace()::NS_INT);
 
                 App::blog()->triggerBlog();
 
@@ -94,6 +98,21 @@ class Manage extends Process
         echo Notices::getNotices();
 
         // Form
+        $tags_mode_options = [
+            My::TAGS_MODE_NONE       => __('No conversion'),
+            My::TAGS_MODE_NOSPACE    => __('Spaces will be removed'),
+            My::TAGS_MODE_CAMELCASE  => __('Spaces will be removed and tag will then be convert to <samp>camelCase</samp>'),
+            My::TAGS_MODE_PASCALCASE => __('Spaces will be removed and tag will then be convert to <samp>PascalCase</samp>'),
+        ];
+        $modes = [];
+        $i     = 0;
+        foreach ($tags_mode_options as $k => $v) {
+            $modes[] = (new Radio(['pb_tags_mode', 'pb_tags_mode-' . $i], $settings->tags_mode == $k))
+                    ->value($k)
+                    ->label((new Label($v, Label::INSIDE_TEXT_AFTER)));//,
+            ++$i;
+        }
+
         echo
         (new Form('ping_bluesky_params'))
             ->action(App::backend()->getPageURL())
@@ -151,13 +170,21 @@ class Manage extends Process
                         ->required(true)
                         ->label((new Label(__('Status prefix:'), Label::OUTSIDE_TEXT_BEFORE))),
                 ]),
-                (new Para())->items([
-                    (new Checkbox('pb_tags', (bool) $settings->tags))
-                        ->value(1)
-                        ->label((new Label(__('Include tags'), Label::INSIDE_TEXT_AFTER))),
+                (new Fieldset())
+                ->legend(new Legend(__('Tags')))
+                ->fields([
+                    (new Para())->items([
+                        (new Checkbox('pb_tags', (bool) $settings->tags))
+                            ->value(1)
+                            ->label((new Label(__('Include tags'), Label::INSIDE_TEXT_AFTER))),
+                    ]),
                     (new Note())
                         ->class('form-note')
                         ->text(__('The tags, inserted as hashtags are currently not recognized on Bluesky.')),
+                    (new Para())->class('pretty-title')->items([
+                        (new Text(null, __('Tags conversion mode:'))),
+                    ]),
+                    ...$modes,
                 ]),
                 // Submit
                 (new Para())->items([

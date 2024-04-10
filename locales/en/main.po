@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dotclear 2 pingBluesky module\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-27 18:31+0100\n"
+"POT-Creation-Date: 2024-04-10 08:50+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,6 +26,18 @@ msgid "Bluesky"
 msgstr ""
 
 msgid "All entries have been ping to Bluesky."
+msgstr ""
+
+msgid "No conversion"
+msgstr ""
+
+msgid "Spaces will be removed"
+msgstr ""
+
+msgid "Spaces will be removed and tag will then be convert to <samp>camelCase</samp>"
+msgstr ""
+
+msgid "Spaces will be removed and tag will then be convert to <samp>PascalCase</samp>"
 msgstr ""
 
 msgid "Activate pingBluesky plugin"
@@ -57,6 +69,9 @@ msgid "Include tags"
 msgstr ""
 
 msgid "The tags, inserted as hashtags are currently not recognized on Bluesky."
+msgstr ""
+
+msgid "Tags conversion mode:"
 msgstr ""
 
 msgid "Save"
