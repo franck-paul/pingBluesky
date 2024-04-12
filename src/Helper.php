@@ -173,12 +173,6 @@ class Helper
                         ]);
                         $response = curl_exec($curl);
                         curl_close($curl);
-
-                        echo '<pre>';
-                        var_dump($payload);
-                        var_dump($response);
-                        echo '</pre>';
-                        exit;
                     }
                 } catch (Exception) {
                 }
