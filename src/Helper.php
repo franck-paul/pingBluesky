@@ -173,6 +173,12 @@ class Helper
                         ]);
                         $response = curl_exec($curl);
                         curl_close($curl);
+
+                        echo '<pre>';
+                        var_dump($payload);
+                        var_dump($response);
+                        echo '</pre>';
+                        exit;
                     }
                 } catch (Exception) {
                 }
@@ -275,13 +281,11 @@ class Helper
         }
 
         $embed = [
-            'embed' => [
-                '$type'    => 'app.bsky.embed.external',
-                'external' => [
-                    'uri'         => $card['uri'],
-                    'title'       => $card['title'],
-                    'description' => $card['description'],
-                ],
+            '$type'    => 'app.bsky.embed.external',
+            'external' => [
+                'uri'         => $card['uri'],
+                'title'       => $card['title'],
+                'description' => $card['description'],
             ],
         ];
 
