@@ -305,9 +305,9 @@ class Helper
      * @param      array        $session   The current Bluesky session
      * @param      string       $img_src   The image URL
      *
-     * @return     null|string  The thumb image to use in embed entry or null on error
+     * @return     null|array  The thumb image to use in embed entry or null on error
      */
-    private static function uploadMediaToBluesky(string $instance, array $session, string $img_src): ?string
+    private static function uploadMediaToBluesky(string $instance, array $session, string $img_src): ?array
     {
         // Fetch image and get mime type
         $curl = curl_init();
