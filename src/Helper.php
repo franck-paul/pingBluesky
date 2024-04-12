@@ -289,7 +289,7 @@ class Helper
             $img_url = $image_tag[0]->nodeValue;
             $image   = self::uploadMediaToBluesky($instance, $session, $img_url);
             if ($image !== null) {
-                $embed['embed']['external']['thumb'] = $image;
+                $embed['external']['thumb'] = $image;
             }
         }
 
