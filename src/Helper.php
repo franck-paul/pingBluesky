@@ -192,12 +192,34 @@ class Helper
      */
     private static function convertTag(string $tag, int $mode = My::TAGS_MODE_NONE): string
     {
+        if (strtoupper($tag) === $tag) {
+            // Don't touch all uppercased tag
+            return $tag;
+        }
+
         return match ($mode) {
-            My::TAGS_MODE_NOSPACE    => str_replace(' ', '', $tag), // Remove spaces
-            My::TAGS_MODE_PASCALCASE => str_replace(' ', '', ucwords($tag)), // Uppercase each words and remove spaces
-            My::TAGS_MODE_CAMELCASE  => lcfirst(str_replace(' ', '', ucwords($tag))), // Uppercase each words but the first and remove spaces
-            My::TAGS_MODE_NONE       => $tag,
-            default                  => $tag,
+            // Remove spaces
+            My::TAGS_MODE_NOSPACE => str_replace(
+                ' ',
+                '',
+                $tag
+            ),
+            // Uppercase each words and remove spaces
+            My::TAGS_MODE_PASCALCASE => str_replace(
+                ' ',
+                '',
+                ucwords(strtolower($tag))
+            ),
+            // Uppercase each words but the first and remove spaces
+            My::TAGS_MODE_CAMELCASE => lcfirst(
+                str_replace(
+                    ' ',
+                    '',
+                    ucwords(strtolower($tag))
+                )
+            ),
+            My::TAGS_MODE_NONE => $tag,
+            default            => $tag,
         };
     }
 
