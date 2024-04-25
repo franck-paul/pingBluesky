@@ -14,7 +14,7 @@ $this->registerModule(
     'Ping Bluesky',
     'Ping Bluesky',
     'Franck Paul',
-    '1.4',
+    '1.5',
     [
         'requires'    => [['core', '2.28']],
         'type'        => 'plugin',
