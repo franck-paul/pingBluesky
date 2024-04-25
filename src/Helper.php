@@ -100,12 +100,29 @@ class Helper
                         // Title
                         $elements[] = $rs->post_title;
                         // Tags
+                        $tag_facets = [];
                         if ($addtags) {
                             $tags = [];
                             $meta = App::meta()->getMetaRecordset($rs->post_meta, 'tag');
                             $meta->sort('meta_id_lower', 'asc');
+                            $message = implode(' ', $elements) . ' ';
+                            $start   = strlen($message);
                             while ($meta->fetch()) {
-                                $tags[] = '#' . self::convertTag($meta->meta_id, $mode);
+                                $tag          = self::convertTag($meta->meta_id, $mode);
+                                $tags[]       = '#' . $tag;
+                                $tag_facets[] = [
+                                    'index' => [
+                                        'byteStart' => $start,
+                                        'byteEnd'   => $start + 1 + strlen($tag),
+                                    ],
+                                    'features' => [
+                                        [
+                                            'tag'   => $tag,
+                                            '$type' => 'app.bsky.richtext.facet#tag',
+                                        ],
+                                    ],
+                                ];
+                                $start += strlen($tag) + 1 /* # */ + 1 /* space */;
                             }
                             $elements[] = implode(' ', $tags);
                         }
@@ -116,6 +133,18 @@ class Helper
                         // Add URL
                         $start = strlen($message);
                         $message .= $url;
+                        $link_facet = [
+                            'index' => [
+                                'byteStart' => $start,
+                                'byteEnd'   => $start + strlen($url),
+                            ],
+                            'features' => [
+                                [
+                                    'uri'   => $url,
+                                    '$type' => 'app.bsky.richtext.facet#link',
+                                ],
+                            ],
+                        ];
 
                         // Get post lang if any else set to blog default lang
                         $lang = $rs->post_lang;
@@ -131,22 +160,15 @@ class Helper
                                 'createdAt' => date('c'),
                                 'text'      => $message,
                                 'langs'     => [$lang],
-                                'facets'    => [
-                                    [
-                                        'index' => [
-                                            'byteStart' => $start,
-                                            'byteEnd'   => $start + strlen($url),
-                                        ],
-                                        'features' => [
-                                            [
-                                                'uri'   => $url,
-                                                '$type' => 'app.bsky.richtext.facet#link',
-                                            ],
-                                        ],
-                                    ],
-                                ],
+                                'facets'    => [],
                             ],
                         ];
+                        if (count($tag_facets)) {
+                            foreach ($tag_facets as $facet) {
+                                $payload['record']['facets'][] = $facet;
+                            }
+                        }
+                        $payload['record']['facets'][] = $link_facet;
 
                         // Try to compose an Entry card
                         $embed = self::fetchEntry($instance, $session, $url);
