@@ -101,8 +101,8 @@ class Helper
                         $elements[] = $rs->post_title;
                         // Tags
                         $tag_facets = [];
+                        $tags       = [];
                         if ($addtags) {
-                            $tags = [];
                             $meta = App::meta()->getMetaRecordset($rs->post_meta, 'tag');
                             $meta->sort('meta_id_lower', 'asc');
                             $message = implode(' ', $elements) . ' ';
@@ -124,11 +124,13 @@ class Helper
                                 ];
                                 $start += strlen($tag) + 1 /* # */ + 1 /* space */;
                             }
-                            $elements[] = implode(' ', $tags);
                         }
 
                         // Compose message
-                        $message = implode(' ', $elements) . ' ';
+                        $message = implode(' ', $elements) . "\n";
+                        if (count($tag_facets)) {
+                            $message .= implode(' ', $tags) . "\n";
+                        }
 
                         // Add URL
                         $start = strlen($message);
