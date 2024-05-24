@@ -45,7 +45,9 @@ class Helper
         $token    = $settings->token;
         $prefix   = $settings->prefix;
         $addtags  = $settings->tags;
-        $mode     = $settings->tags_mode;
+        $tagsmode = $settings->tags_mode;
+        $addcats  = $settings->cats;
+        $catsmode = $settings->cats_mode;
 
         if (empty($instance) || empty($token) || $ids === []) {
             return '';
@@ -99,37 +101,56 @@ class Helper
                         }
                         // Title
                         $elements[] = $rs->post_title;
-                        // Tags
-                        $tag_facets = [];
-                        $tags       = [];
-                        if ($addtags) {
-                            $meta = App::meta()->getMetaRecordset($rs->post_meta, 'tag');
-                            $meta->sort('meta_id_lower', 'asc');
+                        // References (categories, tags)
+                        $ref_facets = [];
+                        $references = [];
+                        if ($addtags || $addcats) {
                             $message = implode(' ', $elements) . ' ';
                             $start   = strlen($message);
-                            while ($meta->fetch()) {
-                                $tag          = self::convertTag($meta->meta_id, $mode);
-                                $tags[]       = '#' . $tag;
-                                $tag_facets[] = [
-                                    'index' => [
-                                        'byteStart' => $start,
-                                        'byteEnd'   => $start + 1 + strlen($tag),
-                                    ],
-                                    'features' => [
-                                        [
-                                            'tag'   => $tag,
-                                            '$type' => 'app.bsky.richtext.facet#tag',
+                            $refs    = [];
+                            if ($addcats) {
+                                if ($rs->cat_id) {
+                                    // Parents categories
+                                    $rscats = App::blog()->getCategoryParents((int) $rs->cat_id, ['cat_title']);
+                                    while ($rscats->fetch()) {
+                                        $refs[] = self::convertRef($rscats->cat_title, $catsmode);
+                                    }
+                                    $refs[] = self::convertRef($rs->cat_title, $catsmode);
+                                }
+                            }
+                            if ($addtags) {
+                                // Tags
+                                $meta = App::meta()->getMetaRecordset($rs->post_meta, 'tag');
+                                $meta->sort('meta_id_lower', 'asc');
+                                while ($meta->fetch()) {
+                                    $refs[] = self::convertRef($meta->meta_id, $tagsmode);
+                                }
+                            }
+                            if (count($refs)) {
+                                $refs = array_unique($refs);
+                                foreach ($refs as $ref) {
+                                    $references[] = '#' . $ref;
+                                    $ref_facets[] = [
+                                        'index' => [
+                                            'byteStart' => $start,
+                                            'byteEnd'   => $start + 1 + strlen($ref),
                                         ],
-                                    ],
-                                ];
-                                $start += strlen($tag) + 1 /* # */ + 1 /* space */;
+                                        'features' => [
+                                            [
+                                                'tag'   => $ref,
+                                                '$type' => 'app.bsky.richtext.facet#tag',
+                                            ],
+                                        ],
+                                    ];
+                                    $start += strlen($ref) + 1 /* # */ + 1 /* space */;
+                                }
                             }
                         }
 
                         // Compose message
                         $message = implode(' ', $elements) . "\n";
-                        if (count($tag_facets)) {
-                            $message .= implode(' ', $tags) . "\n";
+                        if (count($ref_facets)) {
+                            $message .= implode(' ', $references) . "\n";
                         }
 
                         // Add URL
@@ -165,8 +186,8 @@ class Helper
                                 'facets'    => [],
                             ],
                         ];
-                        if (count($tag_facets)) {
-                            foreach ($tag_facets as $facet) {
+                        if (count($ref_facets)) {
+                            foreach ($ref_facets as $facet) {
                                 $payload['record']['facets'][] = $facet;
                             }
                         }
@@ -209,41 +230,41 @@ class Helper
     /**
      * Convert a tag depending on mode
      *
-     * @param      string  $tag    The tag
-     * @param      int     $mode   The mode
+     * @param      string  $reference   The tag
+     * @param      int     $mode        The mode
      *
      * @return     string
      */
-    private static function convertTag(string $tag, int $mode = My::TAGS_MODE_NONE): string
+    private static function convertRef(string $reference, int $mode = My::REFS_MODE_NONE): string
     {
-        if (strtoupper($tag) === $tag) {
+        if (strtoupper($reference) === $reference) {
             // Don't touch all uppercased tag
-            return $tag;
+            return $reference;
         }
 
         return match ($mode) {
             // Remove spaces
-            My::TAGS_MODE_NOSPACE => str_replace(
+            My::REFS_MODE_NOSPACE => str_replace(
                 ' ',
                 '',
-                $tag
+                $reference
             ),
             // Uppercase each words and remove spaces
-            My::TAGS_MODE_PASCALCASE => str_replace(
+            My::REFS_MODE_PASCALCASE => str_replace(
                 ' ',
                 '',
-                ucwords(strtolower($tag))
+                ucwords(strtolower($reference))
             ),
             // Uppercase each words but the first and remove spaces
-            My::TAGS_MODE_CAMELCASE => lcfirst(
+            My::REFS_MODE_CAMELCASE => lcfirst(
                 str_replace(
                     ' ',
                     '',
-                    ucwords(strtolower($tag))
+                    ucwords(strtolower($reference))
                 )
             ),
-            My::TAGS_MODE_NONE => $tag,
-            default            => $tag,
+            My::REFS_MODE_NONE => $reference,
+            default            => $reference,
         };
     }
 

@@ -21,33 +21,33 @@ use Dotclear\Module\MyPlugin;
  */
 class My extends MyPlugin
 {
-    // Tag conversion modes
+    // Reference (tag, category) conversion modes
 
     /**
      * No conversion
      *
      * @var        int
      */
-    public const TAGS_MODE_NONE = 0;
+    public const REFS_MODE_NONE = 0;
 
     /**
      * Spaces removed
      *
      * @var        int
      */
-    public const TAGS_MODE_NOSPACE = 1;
+    public const REFS_MODE_NOSPACE = 1;
 
     /**
      * Spaces removed and converted to camelCase
      *
      * @var        int
      */
-    public const TAGS_MODE_CAMELCASE = 2;
+    public const REFS_MODE_CAMELCASE = 2;
 
     /**
      * Spaces removed and converted to PascalCase
      *
      * @var        int
      */
-    public const TAGS_MODE_PASCALCASE = 3;
+    public const REFS_MODE_PASCALCASE = 3;
 }
