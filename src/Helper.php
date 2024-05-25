@@ -237,6 +237,11 @@ class Helper
      */
     private static function convertRef(string $reference, int $mode = My::REFS_MODE_NONE): string
     {
+        // Mastodon Hashtags can contain alphanumeric characters and underscores,
+        // Replace other (but spaces) with underscores.
+        // \pL stands for any character in any language
+        $reference = preg_replace('/[^\pL\s\d]/mu', '_', $reference);
+
         if (strtoupper($reference) === $reference) {
             // Don't touch all uppercased tag
             return $reference;
