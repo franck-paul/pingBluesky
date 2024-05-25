@@ -3,7 +3,7 @@
     <name>pingBluesky</name>
     <version>1.8</version>
     <author>Franck Paul</author>
-    <desc>Pre-installation Check</desc>
+    <desc>Ping Bluesky</desc>
     <file>https://github.com/franck-paul/pingBluesky/releases/download/1.8/plugin-pingBluesky-1.8.zip</file>
     <da:dcmin>2.28</da:dcmin>
     <da:details>https://open-time.net/?q=pingBluesky</da:details>
