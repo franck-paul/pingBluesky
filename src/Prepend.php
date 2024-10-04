@@ -21,7 +21,8 @@ class Prepend extends Process
 {
     public static function init(): bool
     {
-        return self::status(My::checkContext(My::PREPEND));
+        // Curl lib is mandatory for backend operations
+        return self::status(My::checkContext(My::PREPEND) && function_exists('curl_init'));
     }
 
     public static function process(): bool
