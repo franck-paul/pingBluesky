@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @brief pingBluesky, a plugin for Dotclear 2
  *
@@ -159,7 +160,7 @@ class Helper
                         $link_facet = [
                             'index' => [
                                 'byteStart' => $start,
-                                'byteEnd'   => $start + strlen($url),
+                                'byteEnd'   => $start + strlen((string) $url),
                             ],
                             'features' => [
                                 [
@@ -242,7 +243,7 @@ class Helper
         // \pL stands for any character in any language
         $reference = preg_replace('/[^\pL\s\d]/mu', '_', $reference);
 
-        if (strtoupper($reference) === $reference) {
+        if (strtoupper((string) $reference) === $reference) {
             // Don't touch all uppercased tag
             return $reference;
         }
@@ -258,14 +259,14 @@ class Helper
             My::REFS_MODE_PASCALCASE => str_replace(
                 ' ',
                 '',
-                ucwords(strtolower($reference))
+                ucwords(strtolower((string) $reference))
             ),
             // Uppercase each words but the first and remove spaces
             My::REFS_MODE_CAMELCASE => lcfirst(
                 str_replace(
                     ' ',
                     '',
-                    ucwords(strtolower($reference))
+                    ucwords(strtolower((string) $reference))
                 )
             ),
             My::REFS_MODE_NONE => $reference,
