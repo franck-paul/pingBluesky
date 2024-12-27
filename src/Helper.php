@@ -109,15 +109,13 @@ class Helper
                             $message = implode(' ', $elements) . ' ';
                             $start   = strlen($message);
                             $refs    = [];
-                            if ($addcats) {
-                                if ($rs->cat_id) {
-                                    // Parents categories
-                                    $rscats = App::blog()->getCategoryParents((int) $rs->cat_id, ['cat_title']);
-                                    while ($rscats->fetch()) {
-                                        $refs[] = self::convertRef($rscats->cat_title, $catsmode);
-                                    }
-                                    $refs[] = self::convertRef($rs->cat_title, $catsmode);
+                            if ($addcats && $rs->cat_id) {
+                                // Parents categories
+                                $rscats = App::blog()->getCategoryParents((int) $rs->cat_id, ['cat_title']);
+                                while ($rscats->fetch()) {
+                                    $refs[] = self::convertRef($rscats->cat_title, $catsmode);
                                 }
+                                $refs[] = self::convertRef($rs->cat_title, $catsmode);
                             }
                             if ($addtags) {
                                 // Tags
@@ -127,7 +125,7 @@ class Helper
                                     $refs[] = self::convertRef($meta->meta_id, $tagsmode);
                                 }
                             }
-                            if (count($refs)) {
+                            if ($refs !== []) {
                                 $refs = array_unique($refs);
                                 foreach ($refs as $ref) {
                                     $references[] = '#' . $ref;
@@ -150,7 +148,7 @@ class Helper
 
                         // Compose message
                         $message = implode(' ', $elements) . "\n";
-                        if (count($ref_facets)) {
+                        if ($ref_facets !== []) {
                             $message .= implode(' ', $references) . "\n";
                         }
 
@@ -187,10 +185,8 @@ class Helper
                                 'facets'    => [],
                             ],
                         ];
-                        if (count($ref_facets)) {
-                            foreach ($ref_facets as $facet) {
-                                $payload['record']['facets'][] = $facet;
-                            }
+                        foreach ($ref_facets as $facet) {
+                            $payload['record']['facets'][] = $facet;
                         }
                         $payload['record']['facets'][] = $link_facet;
 
@@ -233,8 +229,6 @@ class Helper
      *
      * @param      string  $reference   The tag
      * @param      int     $mode        The mode
-     *
-     * @return     string
      */
     private static function convertRef(string $reference, int $mode = My::REFS_MODE_NONE): string
     {

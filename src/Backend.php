@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @brief pingBluesky, a plugin for Dotclear 2
  *
@@ -22,7 +23,8 @@ class Backend extends Process
     public static function init(): bool
     {
         // dead but useful code, in order to have translations
-        __('pingBluesky') . __('Ping Bluesky');
+        __('pingBluesky');
+        __('Ping Bluesky');
 
         return self::status(My::checkContext(My::BACKEND));
     }
@@ -36,17 +38,15 @@ class Backend extends Process
         My::addBackendMenuItem(App::backend()->menus()::MENU_BLOG);
 
         $settings = My::settings();
-        if ($settings->active) {
-            // Add posts/pages action
-            if (App::auth()->check(App::auth()->makePermissions([
-                App::auth()::PERMISSION_CONTENT_ADMIN,
-            ]), App::blog()->id())) {
-                App::behavior()->addBehaviors([
-                    /* Add behavior callbacks for posts actions */
-                    'adminPostsActions' => BackendBehaviors::adminPostsActions(...),
-                    'adminPagesActions' => BackendBehaviors::adminPagesActions(...),
-                ]);
-            }
+        // Add posts/pages action
+        if ($settings->active && App::auth()->check(App::auth()->makePermissions([
+            App::auth()::PERMISSION_CONTENT_ADMIN,
+        ]), App::blog()->id())) {
+            App::behavior()->addBehaviors([
+                /* Add behavior callbacks for posts actions */
+                'adminPostsActions' => BackendBehaviors::adminPostsActions(...),
+                'adminPagesActions' => BackendBehaviors::adminPagesActions(...),
+            ]);
         }
 
         return true;
