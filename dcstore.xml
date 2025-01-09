@@ -1,11 +1,11 @@
 <modules xmlns:da="http://dotaddict.org/da/">
   <module id="pingBluesky">
     <name>pingBluesky</name>
-    <version>1.8.1</version>
+    <version>2.0</version>
     <author>Franck Paul</author>
     <desc>Ping Bluesky</desc>
-    <file>https://github.com/franck-paul/pingBluesky/releases/download/1.8.1/plugin-pingBluesky-1.8.1.zip</file>
-    <da:dcmin>2.28</da:dcmin>
+    <file>https://github.com/franck-paul/pingBluesky/releases/download/2.0/plugin-pingBluesky-2.0.zip</file>
+    <da:dcmin>2.33</da:dcmin>
     <da:details>https://open-time.net/?q=pingBluesky</da:details>
     <da:support>https://github.com/franck-paul/pingBluesky</da:support>
   </module>
