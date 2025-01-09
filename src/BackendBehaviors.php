@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @brief pingBluesky, a plugin for Dotclear 2
  *
@@ -62,7 +63,7 @@ class BackendBehaviors
         if ($rs->rows()) {
             $ids = [];
             while ($rs->fetch()) {
-                if ((int) $rs->post_status === App::blog()::POST_PUBLISHED) {
+                if ((int) $rs->post_status > App::status()->post()->threshold()) {
                     // Ping only published entry
                     $ids[] = $rs->post_id;
                 }

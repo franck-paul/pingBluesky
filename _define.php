@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @brief pingBluesky, a plugin for Dotclear 2
  *
@@ -16,7 +17,7 @@ $this->registerModule(
     'Franck Paul',
     '1.8.1',
     [
-        'requires'    => [['core', '2.28']],
+        'requires'    => [['core', '2.33']],
         'type'        => 'plugin',
         'permissions' => 'My',
         'details'     => 'https://open-time.net/docs/plugins/pingBluesky',
