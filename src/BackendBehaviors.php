@@ -63,7 +63,7 @@ class BackendBehaviors
         if ($rs->rows()) {
             $ids = [];
             while ($rs->fetch()) {
-                if ((int) $rs->post_status > App::status()->post()->threshold()) {
+                if ((int) $rs->post_status === App::status()->post()::PUBLISHED) {
                     // Ping only published entry
                     $ids[] = $rs->post_id;
                 }
