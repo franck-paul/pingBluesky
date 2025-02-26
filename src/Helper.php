@@ -55,10 +55,10 @@ class Helper
         }
 
         // Prepare instance URI
-        if (!parse_url($instance, PHP_URL_HOST)) {
-            $instance = 'https://' . ltrim($instance, '/');
+        if (!parse_url((string) $instance, PHP_URL_HOST)) {
+            $instance = 'https://' . ltrim((string) $instance, '/');
         }
-        $instance = rtrim($instance, '/');
+        $instance = rtrim((string) $instance, '/');
 
         // First step, create a new session
         $payload = [
