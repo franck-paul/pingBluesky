@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @brief pingBluesky, a plugin for Dotclear 2
  *
@@ -176,7 +177,6 @@ class Manage extends Process
                         ->size(30)
                         ->maxlength(128)
                         ->value(Html::escapeHTML((string) $settings->prefix))
-                        ->required(true)
                         ->label((new Label(__('Status prefix:'), Label::OUTSIDE_TEXT_BEFORE))),
                 ]),
                 (new Fieldset())

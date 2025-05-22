@@ -24,5 +24,6 @@ $this->registerModule(
         'details'     => 'https://open-time.net/docs/plugins/pingBluesky',
         'support'     => 'https://github.com/franck-paul/pingBluesky',
         'repository'  => 'https://raw.githubusercontent.com/franck-paul/pingBluesky/main/dcstore.xml',
+        'license'     => 'gpl2',
     ]
 );
