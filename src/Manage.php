@@ -101,11 +101,17 @@ class Manage extends Process
         echo Notices::getNotices();
 
         // Form
-        $references_mode_options = [
+        $references_mode_options_tags = [
             My::REFS_MODE_NONE       => __('No conversion'),
             My::REFS_MODE_NOSPACE    => __('Spaces will be removed'),
             My::REFS_MODE_CAMELCASE  => __('Spaces will be removed and tag will then be convert to <samp>camelCase</samp>'),
             My::REFS_MODE_PASCALCASE => __('Spaces will be removed and tag will then be convert to <samp>PascalCase</samp>'),
+        ];
+        $references_mode_options_cats = [
+            My::REFS_MODE_NONE       => __('No conversion'),
+            My::REFS_MODE_NOSPACE    => __('Spaces will be removed'),
+            My::REFS_MODE_CAMELCASE  => __('Spaces will be removed and category name will then be convert to <samp>camelCase</samp>'),
+            My::REFS_MODE_PASCALCASE => __('Spaces will be removed and category name will then be convert to <samp>PascalCase</samp>'),
         ];
         $tagsmodes = [];
         $catsmodes = [];
@@ -113,10 +119,14 @@ class Manage extends Process
         $cats_mode = $settings->cats_mode ?? My::REFS_MODE_CAMELCASE;
 
         $i = 0;
-        foreach ($references_mode_options as $k => $v) {
+        foreach ($references_mode_options_tags as $k => $v) {
             $tagsmodes[] = (new Radio(['pb_tags_mode', 'pb_tags_mode-' . $i], $tags_mode == $k))
                     ->value($k)
                     ->label((new Label($v, Label::INSIDE_TEXT_AFTER)));
+            ++$i;
+        }
+        $i = 0;
+        foreach ($references_mode_options_cats as $k => $v) {
             $catsmodes[] = (new Radio(['pb_cats_mode', 'pb_cats_mode-' . $i], $cats_mode == $k))
                     ->value($k)
                     ->label((new Label($v, Label::INSIDE_TEXT_AFTER)));

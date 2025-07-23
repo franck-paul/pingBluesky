@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dotclear 2 pingBluesky module\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-24 17:05+0200\n"
+"POT-Creation-Date: 2025-07-23 18:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,10 +16,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "Ping Bluesky"
+msgid "pingBluesky"
 msgstr ""
 
-msgid "pingBluesky"
+msgid "Ping Bluesky"
 msgstr ""
 
 msgid "Bluesky"
@@ -38,6 +38,12 @@ msgid "Spaces will be removed and tag will then be convert to <samp>camelCase</s
 msgstr ""
 
 msgid "Spaces will be removed and tag will then be convert to <samp>PascalCase</samp>"
+msgstr ""
+
+msgid "Spaces will be removed and category name will then be convert to <samp>camelCase</samp>"
+msgstr ""
+
+msgid "Spaces will be removed and category name will then be convert to <samp>PascalCase</samp>"
 msgstr ""
 
 msgid "Activate pingBluesky plugin"

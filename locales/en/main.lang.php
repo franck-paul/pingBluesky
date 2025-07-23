@@ -10,14 +10,16 @@
 
 use Dotclear\Helper\L10n;
 
-L10n::$locales['Ping Bluesky'] = '';
 L10n::$locales['pingBluesky'] = '';
+L10n::$locales['Ping Bluesky'] = '';
 L10n::$locales['Bluesky'] = '';
 L10n::$locales['All entries have been ping to Bluesky.'] = '';
 L10n::$locales['No conversion'] = '';
 L10n::$locales['Spaces will be removed'] = '';
 L10n::$locales['Spaces will be removed and tag will then be convert to <samp>camelCase</samp>'] = '';
 L10n::$locales['Spaces will be removed and tag will then be convert to <samp>PascalCase</samp>'] = '';
+L10n::$locales['Spaces will be removed and category name will then be convert to <samp>camelCase</samp>'] = '';
+L10n::$locales['Spaces will be removed and category name will then be convert to <samp>PascalCase</samp>'] = '';
 L10n::$locales['Activate pingBluesky plugin'] = '';
 L10n::$locales['The mandatory cURL library is <strong>%s</strong>.'] = '';
 L10n::$locales['installed and enabled'] = '';
