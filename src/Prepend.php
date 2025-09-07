@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @brief pingBluesky, a plugin for Dotclear 2
  *
@@ -15,10 +16,12 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\pingBluesky;
 
 use Dotclear\App;
-use Dotclear\Core\Process;
+use Dotclear\Helper\Process\TraitProcess;
 
-class Prepend extends Process
+class Prepend
 {
+    use TraitProcess;
+
     public static function init(): bool
     {
         // Curl lib is mandatory for backend operations

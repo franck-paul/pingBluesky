@@ -18,7 +18,7 @@ $this->registerModule(
     '2.2.2',
     [
         'date'        => '2025-07-23T18:38:59+0200',
-        'requires'    => [['core', '2.33']],
+        'requires'    => [['core', '2.36']],
         'type'        => 'plugin',
         'permissions' => 'My',
         'details'     => 'https://open-time.net/docs/plugins/pingBluesky',
