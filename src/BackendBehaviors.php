@@ -18,7 +18,6 @@ namespace Dotclear\Plugin\pingBluesky;
 use arrayObject;
 use Dotclear\App;
 use Dotclear\Core\Backend\Action\ActionsPosts;
-use Dotclear\Core\Backend\Notices;
 use Dotclear\Plugin\pages\BackendActions as PagesBackendActions;
 
 class BackendBehaviors
@@ -71,7 +70,7 @@ class BackendBehaviors
 
             if ($ids !== []) {
                 Helper::ping(App::blog(), $ids);
-                Notices::addSuccessNotice(__('All entries have been ping to Bluesky.'));
+                App::backend()->notices()->addSuccessNotice(__('All entries have been ping to Bluesky.'));
             }
 
             $ap->redirect(true);
