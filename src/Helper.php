@@ -253,14 +253,14 @@ class Helper
             My::REFS_MODE_PASCALCASE => str_replace(
                 ' ',
                 '',
-                mb_convert_case(ucwords(strtolower((string) $reference)), MB_CASE_TITLE, "UTF-8")
+                ucwords(mb_convert_case(strtolower((string) $reference), MB_CASE_TITLE, "UTF-8"))
             ),
             // Uppercase each words but the first and remove spaces
             My::REFS_MODE_CAMELCASE => lcfirst(
                 str_replace(
                     ' ',
                     '',
-                    mb_convert_case(ucwords(strtolower((string) $reference)), MB_CASE_TITLE, "UTF-8")
+                    ucwords(mb_convert_case(strtolower((string) $reference), MB_CASE_TITLE, "UTF-8"))
                 )
             ),
             My::REFS_MODE_NONE => $reference,
