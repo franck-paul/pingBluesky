@@ -82,7 +82,6 @@ class Helper
             ],
         ]);
         $response = curl_exec($curl);
-        curl_close($curl);
 
         if ($response !== false) {
             $session = json_decode($response, true);
@@ -214,7 +213,6 @@ class Helper
                             ],
                         ]);
                         $response = curl_exec($curl);
-                        curl_close($curl);
                     }
                 } catch (Exception) {
                 }
@@ -304,7 +302,6 @@ class Helper
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         }
         $response = curl_exec($curl);
-        curl_close($curl);
         if ($response === false) {
             return null;
         }
@@ -393,7 +390,6 @@ class Helper
         }
         $response = curl_exec($curl);
         $mime     = curl_getinfo($curl, CURLINFO_CONTENT_TYPE);
-        curl_close($curl);
         if ($response === false) {
             return null;
         }
@@ -416,7 +412,6 @@ class Helper
             ],
         ]);
         $response = curl_exec($curl);
-        curl_close($curl);
         if ($response === false) {
             return null;
         }
