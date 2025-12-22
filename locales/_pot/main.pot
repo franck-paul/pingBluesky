@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dotclear 2 pingBluesky module\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-23 18:32+0200\n"
+"POT-Creation-Date: 2025-12-22 10:53+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,109 +16,113 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../git-plugins/pingBluesky/src/Backend.php:26
+#: ../git-plugins/pingBluesky/src/Backend.php:28
 msgid "pingBluesky"
 msgstr ""
 
-#: ../git-plugins/pingBluesky/src/Backend.php:27
-#: ../git-plugins/pingBluesky/src/BackendBehaviors.php:33
-#: ../git-plugins/pingBluesky/src/BackendBehaviors.php:48
-#: ../git-plugins/pingBluesky/src/Manage.php:98
+#: ../git-plugins/pingBluesky/src/Backend.php:29
+#: ../git-plugins/pingBluesky/src/BackendBehaviors.php:32
+#: ../git-plugins/pingBluesky/src/BackendBehaviors.php:47
+#: ../git-plugins/pingBluesky/src/Manage.php:99
 msgid "Ping Bluesky"
 msgstr ""
 
-#: ../git-plugins/pingBluesky/src/BackendBehaviors.php:33
-#: ../git-plugins/pingBluesky/src/BackendBehaviors.php:48
+#: ../git-plugins/pingBluesky/src/BackendBehaviors.php:32
+#: ../git-plugins/pingBluesky/src/BackendBehaviors.php:47
 msgid "Bluesky"
 msgstr ""
 
-#: ../git-plugins/pingBluesky/src/BackendBehaviors.php:74
+#: ../git-plugins/pingBluesky/src/BackendBehaviors.php:73
 msgid "All entries have been ping to Bluesky."
-msgstr ""
-
-#: ../git-plugins/pingBluesky/src/Manage.php:105
-#: ../git-plugins/pingBluesky/src/Manage.php:111
-msgid "No conversion"
 msgstr ""
 
 #: ../git-plugins/pingBluesky/src/Manage.php:106
 #: ../git-plugins/pingBluesky/src/Manage.php:112
-msgid "Spaces will be removed"
+msgid "No conversion"
 msgstr ""
 
 #: ../git-plugins/pingBluesky/src/Manage.php:107
-msgid "Spaces will be removed and tag will then be convert to <samp>camelCase</samp>"
+#: ../git-plugins/pingBluesky/src/Manage.php:113
+msgid "Spaces will be removed"
 msgstr ""
 
 #: ../git-plugins/pingBluesky/src/Manage.php:108
+msgid "Spaces will be removed and tag will then be convert to <samp>camelCase</samp>"
+msgstr ""
+
+#: ../git-plugins/pingBluesky/src/Manage.php:109
 msgid "Spaces will be removed and tag will then be convert to <samp>PascalCase</samp>"
 msgstr ""
 
-#: ../git-plugins/pingBluesky/src/Manage.php:113
+#: ../git-plugins/pingBluesky/src/Manage.php:114
 msgid "Spaces will be removed and category name will then be convert to <samp>camelCase</samp>"
 msgstr ""
 
-#: ../git-plugins/pingBluesky/src/Manage.php:114
+#: ../git-plugins/pingBluesky/src/Manage.php:115
 msgid "Spaces will be removed and category name will then be convert to <samp>PascalCase</samp>"
 msgstr ""
 
-#: ../git-plugins/pingBluesky/src/Manage.php:144
+#: ../git-plugins/pingBluesky/src/Manage.php:147
 msgid "Activate pingBluesky plugin"
 msgstr ""
 
-#: ../git-plugins/pingBluesky/src/Manage.php:148
+#: ../git-plugins/pingBluesky/src/Manage.php:151
 #, php-format
 msgid "The mandatory cURL library is <strong>%s</strong>."
 msgstr ""
 
-#: ../git-plugins/pingBluesky/src/Manage.php:149
+#: ../git-plugins/pingBluesky/src/Manage.php:152
 msgid "installed and enabled"
 msgstr ""
 
-#: ../git-plugins/pingBluesky/src/Manage.php:149
+#: ../git-plugins/pingBluesky/src/Manage.php:152
 msgid "missing or disabled"
 msgstr ""
 
-#: ../git-plugins/pingBluesky/src/Manage.php:159
+#: ../git-plugins/pingBluesky/src/Manage.php:162
 msgid "Bluesky instance:"
 msgstr ""
 
-#: ../git-plugins/pingBluesky/src/Manage.php:170
+#: ../git-plugins/pingBluesky/src/Manage.php:173
 msgid "Account handle:"
 msgstr ""
 
-#: ../git-plugins/pingBluesky/src/Manage.php:181
+#: ../git-plugins/pingBluesky/src/Manage.php:184
 msgid "Application token:"
 msgstr ""
 
-#: ../git-plugins/pingBluesky/src/Manage.php:190
+#: ../git-plugins/pingBluesky/src/Manage.php:193
 msgid "Status prefix:"
 msgstr ""
 
 #: ../git-plugins/pingBluesky/src/Manage.php:198
+msgid "Automatically ping when an entry is first published"
+msgstr ""
+
+#: ../git-plugins/pingBluesky/src/Manage.php:206
 msgid "Include tags"
 msgstr ""
 
-#: ../git-plugins/pingBluesky/src/Manage.php:202
+#: ../git-plugins/pingBluesky/src/Manage.php:210
 msgid "The tags, inserted as hashtags are currently not recognized on Bluesky."
 msgstr ""
 
-#: ../git-plugins/pingBluesky/src/Manage.php:204
+#: ../git-plugins/pingBluesky/src/Manage.php:212
 msgid "Tags conversion mode:"
 msgstr ""
 
-#: ../git-plugins/pingBluesky/src/Manage.php:214
+#: ../git-plugins/pingBluesky/src/Manage.php:222
 msgid "Include categories"
 msgstr ""
 
-#: ../git-plugins/pingBluesky/src/Manage.php:218
+#: ../git-plugins/pingBluesky/src/Manage.php:226
 msgid "Will include category's parents"
 msgstr ""
 
-#: ../git-plugins/pingBluesky/src/Manage.php:220
+#: ../git-plugins/pingBluesky/src/Manage.php:228
 msgid "Categories conversion mode:"
 msgstr ""
 
-#: ../git-plugins/pingBluesky/src/Manage.php:227
+#: ../git-plugins/pingBluesky/src/Manage.php:235
 msgid "Save"
 msgstr ""

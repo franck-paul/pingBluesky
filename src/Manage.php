@@ -66,6 +66,7 @@ class Manage
                 $settings->put('tags_mode', (int) $_POST['pb_tags_mode'], App::blogWorkspace()::NS_INT);
                 $settings->put('cats', !empty($_POST['pb_cats']));
                 $settings->put('cats_mode', (int) $_POST['pb_cats_mode'], App::blogWorkspace()::NS_INT);
+                $settings->put('auto_ping', !empty($_POST['pb_auto_ping']), App::blogWorkspace()::NS_BOOL);
 
                 App::blog()->triggerBlog();
 
@@ -133,6 +134,8 @@ class Manage
             ++$i;
         }
 
+        $auto_ping = $settings->auto_ping ?? true;
+
         echo
         (new Form('ping_bluesky_params'))
             ->action(App::backend()->getPageURL())
@@ -188,6 +191,11 @@ class Manage
                         ->maxlength(128)
                         ->value(Html::escapeHTML((string) $settings->prefix))
                         ->label((new Label(__('Status prefix:'), Label::OUTSIDE_TEXT_BEFORE))),
+                ]),
+                (new Para())->items([
+                    (new Checkbox('pb_auto_ping', $auto_ping))
+                        ->value(1)
+                        ->label((new Label(__('Automatically ping when an entry is first published'), Label::INSIDE_TEXT_AFTER))),
                 ]),
                 (new Fieldset())
                 ->legend(new Legend(__('Tags')))

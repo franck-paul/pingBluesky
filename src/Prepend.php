@@ -34,8 +34,13 @@ class Prepend
             return false;
         }
 
-        // pingBluesky behavior
-        App::behavior()->addBehavior('coreFirstPublicationEntries', Helper::ping(...));
+        $settings  = My::settings();
+        $auto_ping = $settings->auto_ping ?? true;
+
+        if ($auto_ping) {
+            // pingBluesky behavior
+            App::behavior()->addBehavior('coreFirstPublicationEntries', Helper::ping(...));
+        }
 
         return true;
     }

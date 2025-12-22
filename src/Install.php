@@ -48,6 +48,7 @@ class Install
             $settings->put('tags_mode', My::REFS_MODE_CAMELCASE, App::blogWorkspace()::NS_INT, 'Tags conversion mode', false, true);
             $settings->put('cats', false, App::blogWorkspace()::NS_BOOL, 'Include categories as tag', false, true);
             $settings->put('cats_mode', My::REFS_MODE_CAMELCASE, App::blogWorkspace()::NS_INT, 'Categories conversion mode', false, true);
+            $settings->put('auto_ping', true, App::blogWorkspace()::NS_BOOL, 'Automatically ping when an entry is first published', false, true);
         } catch (Exception $exception) {
             App::error()->add($exception->getMessage());
         }

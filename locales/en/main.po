@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dotclear 2 pingBluesky module\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-23 18:32+0200\n"
+"POT-Creation-Date: 2025-12-22 10:53+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -69,6 +69,9 @@ msgid "Application token:"
 msgstr ""
 
 msgid "Status prefix:"
+msgstr ""
+
+msgid "Automatically ping when an entry is first published"
 msgstr ""
 
 msgid "Include tags"
