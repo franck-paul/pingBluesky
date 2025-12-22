@@ -28,6 +28,7 @@ L10n::$locales['Bluesky instance:'] = 'Instance Bluesky :';
 L10n::$locales['Account handle:'] = 'Compte :';
 L10n::$locales['Application token:'] = 'Jeton applicatif :';
 L10n::$locales['Status prefix:'] = 'Préfixe de statut :';
+L10n::$locales['Automatically ping when an entry is first published'] = 'Ping automatique à la première publication d\'une entrée';
 L10n::$locales['Include tags'] = 'Inclure les mots-clés';
 L10n::$locales['The tags, inserted as hashtags are currently not recognized on Bluesky.'] = 'Les mots-clés, insérés en tant que hashtags/mots-dièse, ne sont actuellement pas reconnus sur Bluesky.';
 L10n::$locales['Tags conversion mode:'] = 'Mode de conversion des mots-clés :';
