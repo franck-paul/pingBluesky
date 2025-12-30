@@ -184,8 +184,8 @@ class Helper
                                 'facets'    => [],
                             ],
                         ];
-                        foreach ($ref_facets as $facet) {
-                            $payload['record']['facets'][] = $facet;
+                        foreach ($ref_facets as $ref_facet) {
+                            $payload['record']['facets'][] = $ref_facet;
                         }
                         $payload['record']['facets'][] = $link_facet;
 
