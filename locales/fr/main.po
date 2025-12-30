@@ -56,7 +56,7 @@ msgid ""
 "Spaces will be removed and category name will then be convert to "
 "<samp>camelCase</samp>"
 msgstr ""
-"Les espaces seront supprimés et le nom de la catégorie sera converti en "
+"Les espaces seront supprimées et le nom de la catégorie sera converti en "
 "<samp>camelCase</samp>."
 
 msgid ""
