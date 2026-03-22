@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dotclear 2 pingBluesky module\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-22 10:53+0100\n"
+"POT-Creation-Date: 2026-03-22 17:32+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -71,10 +71,19 @@ msgstr ""
 msgid "Status prefix:"
 msgstr ""
 
+msgid "Automatic ping"
+msgstr ""
+
 msgid "Automatically ping when an entry is first published"
 msgstr ""
 
-msgid "Include tags"
+msgid "Restrict automatic ping to one category only"
+msgstr ""
+
+msgid "Category:"
+msgstr ""
+
+msgid "List tags as hashtags"
 msgstr ""
 
 msgid "The tags, inserted as hashtags are currently not recognized on Bluesky."
@@ -83,10 +92,10 @@ msgstr ""
 msgid "Tags conversion mode:"
 msgstr ""
 
-msgid "Include categories"
+msgid "List the names of the categories as hashtags"
 msgstr ""
 
-msgid "Will include category's parents"
+msgid "It will also add the names of the parent categories"
 msgstr ""
 
 msgid "Categories conversion mode:"

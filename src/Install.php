@@ -49,6 +49,8 @@ class Install
             $settings->put('cats', false, App::blogWorkspace()::NS_BOOL, 'Include categories as tag', false, true);
             $settings->put('cats_mode', My::REFS_MODE_CAMELCASE, App::blogWorkspace()::NS_INT, 'Categories conversion mode', false, true);
             $settings->put('auto_ping', true, App::blogWorkspace()::NS_BOOL, 'Automatically ping when an entry is first published', false, true);
+            $settings->put('only_cat', false, App::blogWorkspace()::NS_BOOL, 'Restrict to one category', false, true);
+            $settings->put('only_cat_id', 0, App::blogWorkspace()::NS_INT, 'Restricted category ID', false, true);
         } catch (Exception $exception) {
             App::error()->add($exception->getMessage());
         }

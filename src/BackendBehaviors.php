@@ -69,7 +69,7 @@ class BackendBehaviors
             }
 
             if ($ids !== []) {
-                Helper::ping(App::blog(), $ids);
+                Helper::ping(App::blog(), $ids, true);
                 App::backend()->notices()->addSuccessNotice(__('All entries have been ping to Bluesky.'));
             }
 

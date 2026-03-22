@@ -26,6 +26,7 @@ use Dotclear\Helper\Html\Form\Legend;
 use Dotclear\Helper\Html\Form\Note;
 use Dotclear\Helper\Html\Form\Para;
 use Dotclear\Helper\Html\Form\Radio;
+use Dotclear\Helper\Html\Form\Select;
 use Dotclear\Helper\Html\Form\Submit;
 use Dotclear\Helper\Html\Form\Text;
 use Dotclear\Helper\Html\Html;
@@ -67,6 +68,8 @@ class Manage
                 $settings->put('cats', !empty($_POST['pb_cats']));
                 $settings->put('cats_mode', (int) $_POST['pb_cats_mode'], App::blogWorkspace()::NS_INT);
                 $settings->put('auto_ping', !empty($_POST['pb_auto_ping']), App::blogWorkspace()::NS_BOOL);
+                $settings->put('only_cat', !empty($_POST['pb_only_cat']), App::blogWorkspace()::NS_BOOL);
+                $settings->put('only_cat_id', (int) $_POST['pb_only_cat_id'], App::blogWorkspace()::NS_INT);
 
                 App::blog()->triggerBlog();
 
@@ -136,6 +139,10 @@ class Manage
 
         $auto_ping = $settings->auto_ping ?? true;
 
+        $categories_combo = App::backend()->combos()->getCategoriesCombo(
+            App::blog()->getCategories()
+        );
+
         echo
         (new Form('ping_bluesky_params'))
             ->action(App::backend()->getPageURL())
@@ -192,18 +199,33 @@ class Manage
                         ->value(Html::escapeHTML((string) $settings->prefix))
                         ->label((new Label(__('Status prefix:'), Label::OUTSIDE_TEXT_BEFORE))),
                 ]),
-                (new Para())->items([
-                    (new Checkbox('pb_auto_ping', $auto_ping))
-                        ->value(1)
-                        ->label((new Label(__('Automatically ping when an entry is first published'), Label::INSIDE_TEXT_AFTER))),
-                ]),
+                (new Fieldset())
+                    ->legend(new Legend(__('Automatic ping')))
+                    ->fields([
+                        (new Checkbox('pb_auto_ping', $auto_ping))
+                            ->value(1)
+                            ->label((new Label(__('Automatically ping when an entry is first published'), Label::INSIDE_TEXT_AFTER))),
+                        (new Para())->items([
+                            (new Checkbox('pb_only_cat', (bool) $settings->only_cat))
+                                ->value(1)
+                                ->label((new Label(__('Restrict automatic ping to one category only'), Label::INSIDE_TEXT_AFTER))),
+                        ]),
+                        (new Para())
+                            ->items([
+                                (new Select('pb_only_cat_id'))
+                                    ->items($categories_combo)
+                                    ->default((int) $settings->only_cat_id)
+                                    ->label(new Label(__('Category:'), Label::IL_TF)),
+                            ]),
+
+                    ]),
                 (new Fieldset())
                 ->legend(new Legend(__('Tags')))
                 ->fields([
                     (new Para())->items([
                         (new Checkbox('pb_tags', (bool) $settings->tags))
                             ->value(1)
-                            ->label((new Label(__('Include tags'), Label::INSIDE_TEXT_AFTER))),
+                            ->label((new Label(__('List tags as hashtags'), Label::INSIDE_TEXT_AFTER))),
                     ]),
                     (new Note())
                         ->class('form-note')
@@ -219,11 +241,11 @@ class Manage
                     (new Para())->items([
                         (new Checkbox('pb_cats', (bool) $settings->cats))
                             ->value(1)
-                            ->label((new Label(__('Include categories'), Label::INSIDE_TEXT_AFTER))),
+                            ->label((new Label(__('List the names of the categories as hashtags'), Label::INSIDE_TEXT_AFTER))),
                     ]),
                     (new Note())
                         ->class('form-note')
-                        ->text(__('Will include category\'s parents')),
+                        ->text(__('It will also add the names of the parent categories')),
                     (new Para())->class('pretty-title')->items([
                         (new Text(null, __('Categories conversion mode:'))),
                     ]),

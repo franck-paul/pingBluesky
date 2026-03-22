@@ -30,7 +30,7 @@ class Helper
      * @param      BlogInterface        $blog   The blog
      * @param      array<int>           $ids    The identifiers
      */
-    public static function ping(BlogInterface $blog, array $ids): string
+    public static function ping(BlogInterface $blog, array $ids, bool $ignore_category = false): string
     {
         $settings = My::settings();
         if (!$settings->active) {
@@ -41,14 +41,16 @@ class Helper
             return '';
         }
 
-        $instance = $settings->instance;
-        $account  = $settings->account;
-        $token    = $settings->token;
-        $prefix   = $settings->prefix;
-        $addtags  = $settings->tags;
-        $tagsmode = $settings->tags_mode;
-        $addcats  = $settings->cats;
-        $catsmode = $settings->cats_mode;
+        $instance    = $settings->instance;
+        $account     = $settings->account;
+        $token       = $settings->token;
+        $prefix      = $settings->prefix;
+        $addtags     = $settings->tags;
+        $tagsmode    = $settings->tags_mode;
+        $addcats     = $settings->cats;
+        $catsmode    = $settings->cats_mode;
+        $only_cat    = is_bool($only_cat = $settings->only_cat) && $only_cat;
+        $only_cat_id = is_numeric($only_cat_id = $settings->only_cat_id) ? (int) $only_cat_id : 0;
 
         if (empty($instance) || empty($token) || $ids === []) {
             return '';
@@ -92,6 +94,12 @@ class Helper
                     $rs = $blog->getPosts(['post_id' => $ids]);
                     $rs->extend(Post::class);
                     while ($rs->fetch()) {
+                        $cat_id = is_numeric($cat_id = $rs->cat_id) ? (int) $cat_id : 0;
+                        if ($ignore_category === false && $only_cat && $cat_id !== $only_cat_id) {
+                            // We do not ignore category and
+                            // the article's category isn't the only one that needs to be taken into account
+                            continue;
+                        }
                         $url = $rs->getURL();
 
                         $elements = [];
@@ -108,9 +116,9 @@ class Helper
                             $message = implode(' ', $elements) . ' ';
                             $start   = strlen($message);
                             $refs    = [];
-                            if ($addcats && $rs->cat_id) {
+                            if ($addcats && $cat_id !== 0) {
                                 // Parents categories
-                                $rscats = App::blog()->getCategoryParents((int) $rs->cat_id, ['cat_title']);
+                                $rscats = App::blog()->getCategoryParents($cat_id, ['cat_title']);
                                 while ($rscats->fetch()) {
                                     $refs[] = self::convertRef($rscats->cat_title, $catsmode);
                                 }
