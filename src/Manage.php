@@ -54,22 +54,26 @@ class Manage
         }
 
         if ($_POST !== []) {
+            $_Bool = fn (string $name): bool => !empty($_POST[$name]);
+            $_Int  = fn (string $name, int $default = 0): int => isset($_POST[$name]) && is_numeric($val = $_POST[$name]) ? (int) $val : $default;
+            $_Str  = fn (string $name, string $default = ''): string => isset($_POST[$name]) && is_string($val = $_POST[$name]) ? trim($val) : $default;
+
             try {
                 $settings = My::settings();
 
-                $settings->put('active', !empty($_POST['pb_active']));
+                $settings->put('active', $_Bool('pb_active'), App::blogWorkspace()::NS_BOOL);
 
-                $settings->put('instance', trim(Html::escapeHTML($_POST['pb_instance'])));
-                $settings->put('account', trim(Html::escapeHTML($_POST['pb_account'])));
-                $settings->put('token', trim(Html::escapeHTML($_POST['pb_token'])));
-                $settings->put('prefix', trim(Html::escapeHTML($_POST['pb_prefix'])));
-                $settings->put('tags', !empty($_POST['pb_tags']));
-                $settings->put('tags_mode', (int) $_POST['pb_tags_mode'], App::blogWorkspace()::NS_INT);
-                $settings->put('cats', !empty($_POST['pb_cats']));
-                $settings->put('cats_mode', (int) $_POST['pb_cats_mode'], App::blogWorkspace()::NS_INT);
-                $settings->put('auto_ping', !empty($_POST['pb_auto_ping']), App::blogWorkspace()::NS_BOOL);
-                $settings->put('only_cat', !empty($_POST['pb_only_cat']), App::blogWorkspace()::NS_BOOL);
-                $settings->put('only_cat_id', (int) $_POST['pb_only_cat_id'], App::blogWorkspace()::NS_INT);
+                $settings->put('instance', $_Str('pb_instance'), App::blogWorkspace()::NS_STRING);
+                $settings->put('account', $_Str('pb_account'), App::blogWorkspace()::NS_STRING);
+                $settings->put('token', $_Str('pb_token'), App::blogWorkspace()::NS_STRING);
+                $settings->put('prefix', $_Str('pb_prefix'), App::blogWorkspace()::NS_STRING);
+                $settings->put('tags', $_Bool('pb_tags'), App::blogWorkspace()::NS_BOOL);
+                $settings->put('tags_mode', $_Int('pb_tags_mode'), App::blogWorkspace()::NS_INT);
+                $settings->put('cats', $_Bool('pb_cats'), App::blogWorkspace()::NS_BOOL);
+                $settings->put('cats_mode', $_Int('pb_cats_mode'), App::blogWorkspace()::NS_INT);
+                $settings->put('auto_ping', $_Bool('pb_auto_ping'), App::blogWorkspace()::NS_BOOL);
+                $settings->put('only_cat', $_Bool('pb_only_cat'), App::blogWorkspace()::NS_BOOL);
+                $settings->put('only_cat_id', $_Int('pb_only_cat_id'), App::blogWorkspace()::NS_INT);
 
                 App::blog()->triggerBlog();
 
@@ -105,6 +109,15 @@ class Manage
         echo App::backend()->notices()->getNotices();
 
         // Form
+
+        $instance = is_string($instance = $settings->instance) ? $instance : '';
+        $account  = is_string($account = $settings->account) ? $account : '';
+        $token    = is_string($token = $settings->token) ? $token : '';
+        $prefix   = is_string($prefix = $settings->prefix) ? $prefix : '';
+
+        $auto_ping   = is_bool($auto_ping = $settings->auto_ping) ? $auto_ping : true;
+        $only_cat_id = is_numeric($only_cat_id = $settings->only_cat_id) ? (int) $only_cat_id : 0;
+
         $references_mode_options_tags = [
             My::REFS_MODE_NONE       => __('No conversion'),
             My::REFS_MODE_NOSPACE    => __('Spaces will be removed'),
@@ -137,8 +150,6 @@ class Manage
             ++$i;
         }
 
-        $auto_ping = $settings->auto_ping ?? true;
-
         $categories_combo = App::backend()->combos()->getCategoriesCombo(
             App::blog()->getCategories()
         );
@@ -163,7 +174,7 @@ class Manage
                     (new Input('pb_instance'))
                         ->size(48)
                         ->maxlength(128)
-                        ->value(Html::escapeHTML((string) $settings->instance))
+                        ->value(Html::escapeHTML($instance))
                         ->required(true)
                         ->label((new Label(
                             (new Text('abbr', '*'))->title(__('Required field'))->render() . __('Bluesky instance:'),
@@ -174,7 +185,7 @@ class Manage
                     (new Input('pb_account'))
                         ->size(48)
                         ->maxlength(128)
-                        ->value(Html::escapeHTML((string) $settings->account))
+                        ->value(Html::escapeHTML($account))
                         ->required(true)
                         ->label((new Label(
                             (new Text('abbr', '*'))->title(__('Required field'))->render() . __('Account handle:'),
@@ -185,7 +196,7 @@ class Manage
                     (new Input('pb_token'))
                         ->size(64)
                         ->maxlength(128)
-                        ->value(Html::escapeHTML((string) $settings->token))
+                        ->value(Html::escapeHTML($token))
                         ->required(true)
                         ->label((new Label(
                             (new Text('abbr', '*'))->title(__('Required field'))->render() . __('Application token:'),
@@ -196,7 +207,7 @@ class Manage
                     (new Input('pb_prefix'))
                         ->size(30)
                         ->maxlength(128)
-                        ->value(Html::escapeHTML((string) $settings->prefix))
+                        ->value(Html::escapeHTML($prefix))
                         ->label((new Label(__('Status prefix:'), Label::OUTSIDE_TEXT_BEFORE))),
                 ]),
                 (new Fieldset())
@@ -214,7 +225,7 @@ class Manage
                             ->items([
                                 (new Select('pb_only_cat_id'))
                                     ->items($categories_combo)
-                                    ->default((int) $settings->only_cat_id)
+                                    ->default($only_cat_id)
                                     ->label(new Label(__('Category:'), Label::IL_TF)),
                             ]),
 

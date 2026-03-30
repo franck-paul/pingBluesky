@@ -15,7 +15,7 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\pingBluesky;
 
-use arrayObject;
+use ArrayObject;
 use Dotclear\App;
 use Dotclear\Core\Backend\Action\ActionsPosts;
 use Dotclear\Plugin\pages\BackendActions as PagesBackendActions;
@@ -56,15 +56,17 @@ class BackendBehaviors
      * @param      ActionsPosts|PagesBackendActions     $ap     Actions
      * @param      ArrayObject<string, mixed>           $post   The post
      */
-    public static function adminPingBluesky(ActionsPosts|PagesBackendActions $ap, arrayObject $post): void
+    public static function adminPingBluesky(ActionsPosts|PagesBackendActions $ap, ArrayObject $post): void
     {
         $rs = $ap->getRS();
         if ($rs->rows()) {
             $ids = [];
             while ($rs->fetch()) {
-                if ((int) $rs->post_status === App::status()->post()::PUBLISHED) {
+                $post_status = is_numeric($post_status = $rs->post_status) ? $post_status : App::status()->post()::UNPUBLISHED;
+                $post_id     = is_numeric($post_id = $rs->post_id) ? (int) $post_id : 0;
+                if ($post_id !== 0 && $post_status === App::status()->post()::PUBLISHED) {
                     // Ping only published entry
-                    $ids[] = $rs->post_id;
+                    $ids[] = $post_id;
                 }
             }
 
