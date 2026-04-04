@@ -100,16 +100,17 @@ class Helper
         /**
          * Session parameters (see https://docs.bsky.app/docs/api/com-atproto-server-create-session)
          *
-         * @var ?array{
-         *          accessJwt: string,
-         *          refreshJwt: string,
-         *          handle: string,
-         *          did: string,
-         *          ...
-         *      }
+         * @var ?array<string, mixed>
          */
         $session = json_decode($response, true);
         if (is_array($session)) {
+            // Check mandatory information in response
+            $did        = isset($session['did'])       && is_string($did = $session['did']) ? $did : '';
+            $access_jwt = isset($session['accessJwt']) && is_string($access_jwt = $session['accessJwt']) ? $access_jwt : '';
+            if ($access_jwt === '' || $did === '') {
+                return '';
+            }
+
             // Second step, post entries
             try {
                 // Get posts information
@@ -229,7 +230,7 @@ class Helper
                     }
 
                     $payload = [
-                        'repo'       => $session['did'],
+                        'repo'       => $did,
                         'collection' => 'app.bsky.feed.post',
                         'record'     => [
                             '$type'     => 'app.bsky.feed.post',
@@ -245,7 +246,7 @@ class Helper
                     $payload['record']['facets'][] = $link_facet;
 
                     // Try to compose an Entry card
-                    $embed = self::fetchEntry($instance, $session, $post_url);
+                    $embed = self::fetchEntry($instance, $access_jwt, $post_url);
                     if ($embed !== null) {
                         $payload['record']['embed'] = $embed;
                     }
@@ -258,11 +259,6 @@ class Helper
 
                     $json_payload = json_encode($payload, JSON_HEX_TAG | JSON_UNESCAPED_SLASHES);
                     if ($json_payload === false) {
-                        return '';
-                    }
-
-                    $access_jwt = $session['accessJwt'];
-                    if ($access_jwt === '') {
                         return '';
                     }
 
@@ -340,21 +336,15 @@ class Helper
     /**
      * Fetches an entry.
      *
-     * @param      string      $instance  The Bluesky instance
-     * @param      array{
-     *                     accessJwt: string,
-     *                     refreshJwt: string,
-     *                     handle: string,
-     *                     did: string,
-     *                     ...
-     *                 }       $session   The Current Bluesky session
-     * @param      string      $url       The entry URL
+     * @param      string      $instance        The Bluesky instance
+     * @param      string      $access_jwt      The session access token
+     * @param      string      $url             The entry URL
      *
      * @return     null|array{'$type': string, external: array{uri: string, title: string, description: string, thumb?: string}}  The entry card to embed or null on error.
      */
-    private static function fetchEntry(string $instance, array $session, string $url): ?array
+    private static function fetchEntry(string $instance, string $access_jwt, string $url): ?array
     {
-        if ($url === '') {
+        if ($url === '' || $access_jwt === '') {
             return null;
         }
 
@@ -455,7 +445,7 @@ class Helper
                 $img_url = $node->nodeValue ?? '';
                 if ($img_url !== '') {
                     // Stop at 1st occurence
-                    $image = self::uploadMediaToBluesky($instance, $session, $img_url);
+                    $image = self::uploadMediaToBluesky($instance, $access_jwt, $img_url);
                     if ($image !== null) {
                         $embed['external']['thumb'] = $image;
                     }
@@ -471,21 +461,15 @@ class Helper
     /**
      * Uploads a media to Bluesky and get thumb to use in embed entry.
      *
-     * @param      string       $instance  The Bluesky instance
-     * @param      array{
-     *                     accessJwt: string,
-     *                     refreshJwt: string,
-     *                     handle: string,
-     *                     did: string,
-     *                     ...
-     *                  }       $session   The Current Bluesky session
-     * @param      string       $img_src   The image URL
+     * @param      string       $instance       The Bluesky instance
+     * @param      string       $access_jwt     The session access token
+     * @param      string       $img_src        The image URL
      *
      * @return     null|string  The thumb image to use in embed entry or null on error
      */
-    private static function uploadMediaToBluesky(string $instance, array $session, string $img_src): ?string
+    private static function uploadMediaToBluesky(string $instance, string $access_jwt, string $img_src): ?string
     {
-        if ($img_src === '') {
+        if ($img_src === '' || $access_jwt === '') {
             return null;
         }
 
@@ -534,7 +518,7 @@ class Helper
             CURLOPT_POSTFIELDS     => $response,
             CURLOPT_HTTPHEADER     => [
                 'Content-Type: ' . $mime,
-                'Authorization: Bearer ' . $session['accessJwt'],
+                'Authorization: Bearer ' . $access_jwt,
             ],
         ]);
         $response = curl_exec($curl);
