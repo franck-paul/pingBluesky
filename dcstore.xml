@@ -1,11 +1,11 @@
 <modules xmlns:da="http://dotaddict.org/da/">
   <module id="pingBluesky">
     <name>pingBluesky</name>
-    <version>3.7</version>
+    <version>3.8</version>
     <author>Franck Paul</author>
     <desc>Ping Bluesky</desc>
-    <date>2026-03-30T13:38:42+0200</date>
-    <file>https://github.com/franck-paul/pingBluesky/releases/download/3.7/plugin-pingBluesky-3.7.zip</file>
+    <date>2026-04-04T15:20:57+0200</date>
+    <file>https://github.com/franck-paul/pingBluesky/releases/download/3.8/plugin-pingBluesky-3.8.zip</file>
     <da:dcmin>2.36</da:dcmin>
     <da:details>https://dotclear.org/plugin/detail/pingBluesky</da:details>
     <da:support>https://github.com/franck-paul/pingBluesky</da:support>
