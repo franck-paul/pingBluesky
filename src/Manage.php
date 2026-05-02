@@ -142,6 +142,7 @@ class Manage
                     ->label((new Label($v, Label::INSIDE_TEXT_AFTER)));
             ++$i;
         }
+
         $i = 0;
         foreach ($references_mode_options_cats as $k => $v) {
             $catsmodes[] = (new Radio(['pb_cats_mode', 'pb_cats_mode-' . $i], $cats_mode == $k))

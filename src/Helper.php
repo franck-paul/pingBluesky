@@ -60,6 +60,7 @@ class Helper
         if (!parse_url($instance, PHP_URL_HOST)) {
             $instance = 'https://' . ltrim($instance, '/');
         }
+
         $instance = rtrim($instance, '/');
 
         // First step, create a new session
@@ -153,6 +154,7 @@ class Helper
                                     $refs[] = self::convertRef($cat_title, $catsmode);
                                 }
                             }
+
                             $cat_title = is_string($cat_title = $rs->cat_title) ? $cat_title : '';
                             if ($cat_title !== '') {
                                 $refs[] = self::convertRef($cat_title, $catsmode);
@@ -243,6 +245,7 @@ class Helper
                     foreach ($ref_facets as $ref_facet) {
                         $payload['record']['facets'][] = $ref_facet;
                     }
+
                     $payload['record']['facets'][] = $link_facet;
 
                     // Try to compose an Entry card
@@ -376,6 +379,7 @@ class Helper
         if (App::config()->devMode() === true && App::config()->debugMode() === true) {
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         }
+
         $response = curl_exec($curl);
         if ($response === false || !is_string($response)) {
             return null;
@@ -409,10 +413,12 @@ class Helper
                 }
             }
         }
+
         if ($card['title'] === '') {
             // Title missing: no card
             return null;
         }
+
         $description_tag = $xpath->query('//meta[@property="og:description"]/@content');
         if ($description_tag !== false && $description_tag->length > 0) {
             foreach ($description_tag as $node) {
@@ -494,10 +500,12 @@ class Helper
         if (App::config()->devMode() === true && App::config()->debugMode() === true) {
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         }
+
         $response = curl_exec($curl);
         if ($response === false || !is_string($response)) {
             return null;
         }
+
         $mime = curl_getinfo($curl, CURLINFO_CONTENT_TYPE);
 
         // upload the file
