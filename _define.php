@@ -15,9 +15,9 @@ $this->registerModule(
     'Ping Bluesky',
     'Ping Bluesky',
     'Franck Paul',
-    '3.8',
+    '3.9',
     [
-        'date'        => '2026-04-04T15:20:57+0200',
+        'date'        => '2026-06-27T12:00:36+0200',
         'requires'    => [['core', '2.36']],
         'type'        => 'plugin',
         'permissions' => 'My',
