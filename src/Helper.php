@@ -118,7 +118,7 @@ class Helper
                 $rs = $blog->getPosts(['post_id' => $ids]);
                 $rs->extend(Post::class);
                 while ($rs->fetch()) {
-                    $cat_id = is_numeric($cat_id = $rs->cat_id) ? (int) $cat_id : 0;
+                    $cat_id = $rs->intField('cat_id');
                     if ($ignore_category === false && $only_cat && $cat_id !== $only_cat_id) {
                         // We do not ignore category and
                         // the article's category isn't the only one that needs to be taken into account
@@ -133,7 +133,7 @@ class Helper
                     }
 
                     // Title
-                    $post_title = is_string($post_title = $rs->post_title) ? $post_title : '';
+                    $post_title = $rs->strField('post_title');
                     $elements[] = $post_title;
 
                     // References (categories, tags)
@@ -149,13 +149,13 @@ class Helper
                             // Parents categories
                             $rscats = App::blog()->getCategoryParents($cat_id);
                             while ($rscats->fetch()) {
-                                $cat_title = is_string($cat_title = $rscats->cat_title) ? $cat_title : '';
+                                $cat_title = $rscats->strField('cat_title');
                                 if ($cat_title !== '') {
                                     $refs[] = self::convertRef($cat_title, $catsmode);
                                 }
                             }
 
-                            $cat_title = is_string($cat_title = $rs->cat_title) ? $cat_title : '';
+                            $cat_title = $rs->strField('cat_title');
                             if ($cat_title !== '') {
                                 $refs[] = self::convertRef($cat_title, $catsmode);
                             }
@@ -163,12 +163,12 @@ class Helper
 
                         // Tags
                         if ($addtags) {
-                            $post_meta = is_string($post_meta = $rs->post_meta) ? $post_meta : '';
+                            $post_meta = $rs->strField('post_meta');
                             if ($post_meta !== '') {
                                 $meta = App::meta()->getMetaRecordset($post_meta, 'tag');
                                 $meta->sort('meta_id_lower', 'asc');
                                 while ($meta->fetch()) {
-                                    $meta_id = is_string($meta_id = $meta->meta_id) ? $meta_id : '';
+                                    $meta_id = $meta->strField('meta_id');
                                     if ($meta_id !== '') {
                                         $refs[] = self::convertRef($meta_id, $tagsmode);
                                     }
@@ -225,7 +225,7 @@ class Helper
                     ];
 
                     // Get post lang if any else set to blog default lang
-                    $lang = is_string($lang = $rs->post_lang) ? $lang : '';
+                    $lang = $rs->strField('post_lang');
                     if ($lang === '') {
                         $system_lang = is_string($system_lang = App::blog()->settings()->system->lang) ? $system_lang : 'en';
                         $lang        = $system_lang;

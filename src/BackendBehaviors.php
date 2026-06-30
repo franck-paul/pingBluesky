@@ -62,8 +62,8 @@ class BackendBehaviors
         if ($rs->rows() !== []) {
             $ids = [];
             while ($rs->fetch()) {
-                $post_status = is_numeric($post_status = $rs->post_status) ? $post_status : App::status()->post()::UNPUBLISHED;
-                $post_id     = is_numeric($post_id = $rs->post_id) ? (int) $post_id : 0;
+                $post_status = $rs->intField('post_status', true) ?: App::status()->post()::UNPUBLISHED;
+                $post_id     = $rs->intField('post_id');
                 if ($post_id !== 0 && $post_status === App::status()->post()::PUBLISHED) {
                     // Ping only published entry
                     $ids[] = $post_id;
