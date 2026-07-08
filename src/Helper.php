@@ -33,7 +33,7 @@ class Helper
     public static function ping(BlogInterface $blog, array $ids, bool $ignore_category = false): string
     {
         $settings = My::settings();
-        if (!$settings->active) {
+        if (!$settings->getBool('active')) {
             return '';
         }
 
@@ -41,27 +41,27 @@ class Helper
             return '';
         }
 
-        $instance    = is_string($instance = $settings->instance) ? $instance : '';
-        $account     = is_string($account = $settings->account) ? $account : '';
-        $token       = is_string($token = $settings->token) ? $token : '';
-        $prefix      = is_string($prefix = $settings->prefix) ? $prefix : '';
-        $addtags     = is_bool($addtags = $settings->tags) && $addtags;
-        $tagsmode    = is_numeric($tagsmode = $settings->tags_mode) ? (int) $tagsmode : My::REFS_MODE_CAMELCASE;
-        $addcats     = is_bool($addcats = $settings->cats) && $addcats;
-        $catsmode    = is_numeric($catsmode = $settings->cats_mode) ? (int) $catsmode : My::REFS_MODE_CAMELCASE;
-        $only_cat    = is_bool($only_cat = $settings->only_cat) && $only_cat;
-        $only_cat_id = is_numeric($only_cat_id = $settings->only_cat_id) ? (int) $only_cat_id : 0;
+        $instance    = $settings->getStr('instance', false);
+        $account     = $settings->getStr('account', false);
+        $token       = $settings->getStr('token', false);
+        $prefix      = $settings->getStr('prefix', false);
+        $addtags     = $settings->getBool('tags', false);
+        $tagsmode    = $settings->getInt('tags_mode', false) ?: My::REFS_MODE_CAMELCASE;
+        $addcats     = $settings->getBool('cats', false);
+        $catsmode    = $settings->getInt('cats_mode', false) ?: My::REFS_MODE_CAMELCASE;
+        $only_cat    = $settings->getBool('only_cat', false);
+        $only_cat_id = $settings->getInt('only_cat_id', false);
 
         if ($instance === '' || $account === '' || $token === '' || $ids === []) {
             return '';
         }
 
         // Prepare instance URI
-        if (!parse_url($instance, PHP_URL_HOST)) {
-            $instance = 'https://' . ltrim($instance, '/');
+        if (!parse_url((string) $instance, PHP_URL_HOST)) {
+            $instance = 'https://' . ltrim((string) $instance, '/');
         }
 
-        $instance = rtrim($instance, '/');
+        $instance = rtrim((string) $instance, '/');
 
         // First step, create a new session
         $payload = [
@@ -227,8 +227,7 @@ class Helper
                     // Get post lang if any else set to blog default lang
                     $lang = $rs->strField('post_lang');
                     if ($lang === '') {
-                        $system_lang = is_string($system_lang = App::blog()->settings()->system->lang) ? $system_lang : 'en';
-                        $lang        = $system_lang;
+                        $lang = App::blog()->settings()->get('system')->getStr('lang', false) ?: 'en';
                     }
 
                     $payload = [

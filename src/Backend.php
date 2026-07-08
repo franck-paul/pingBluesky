@@ -42,7 +42,7 @@ class Backend
 
         $settings = My::settings();
         // Add posts/pages action
-        if ($settings->active && App::auth()->check(App::auth()->makePermissions([
+        if ($settings->getBool('active') && App::auth()->check(App::auth()->makePermissions([
             App::auth()::PERMISSION_CONTENT_ADMIN,
         ]), App::blog()->id())) {
             App::behavior()->addBehaviors([

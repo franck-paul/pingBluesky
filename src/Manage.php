@@ -110,13 +110,12 @@ class Manage
 
         // Form
 
-        $instance = is_string($instance = $settings->instance) ? $instance : '';
-        $account  = is_string($account = $settings->account) ? $account : '';
-        $token    = is_string($token = $settings->token) ? $token : '';
-        $prefix   = is_string($prefix = $settings->prefix) ? $prefix : '';
-
-        $auto_ping   = is_bool($auto_ping = $settings->auto_ping) ? $auto_ping : true;
-        $only_cat_id = is_numeric($only_cat_id = $settings->only_cat_id) ? (int) $only_cat_id : 0;
+        $instance    = $settings->getStr('instance', false);
+        $account     = $settings->getStr('account', false);
+        $token       = $settings->getStr('token', false);
+        $prefix      = $settings->getStr('prefix', false);
+        $auto_ping   = $settings->getBool('auto_ping') ?? true;
+        $only_cat_id = $settings->getInt('only_cat_id', false);
 
         $references_mode_options_tags = [
             My::REFS_MODE_NONE       => __('No conversion'),
@@ -132,8 +131,8 @@ class Manage
         ];
         $tagsmodes = [];
         $catsmodes = [];
-        $tags_mode = $settings->tags_mode ?? My::REFS_MODE_CAMELCASE;
-        $cats_mode = $settings->cats_mode ?? My::REFS_MODE_CAMELCASE;
+        $tags_mode = $settings->getInt('tags_mode') ?? My::REFS_MODE_CAMELCASE;
+        $cats_mode = $settings->getInt('cats_mode') ?? My::REFS_MODE_CAMELCASE;
 
         $i = 0;
         foreach ($references_mode_options_tags as $k => $v) {
@@ -161,7 +160,7 @@ class Manage
             ->method('post')
             ->fields([
                 (new Para())->items([
-                    (new Checkbox('pb_active', (bool) $settings->active))
+                    (new Checkbox('pb_active', $settings->getBool('active', false)))
                         ->value(1)
                         ->label((new Label(__('Activate pingBluesky plugin'), Label::INSIDE_TEXT_AFTER))),
                     (new Note())
@@ -218,7 +217,7 @@ class Manage
                             ->value(1)
                             ->label((new Label(__('Automatically ping when an entry is first published'), Label::INSIDE_TEXT_AFTER))),
                         (new Para())->items([
-                            (new Checkbox('pb_only_cat', (bool) $settings->only_cat))
+                            (new Checkbox('pb_only_cat', $settings->getBool('only_cat', false)))
                                 ->value(1)
                                 ->label((new Label(__('Restrict automatic ping to one category only'), Label::INSIDE_TEXT_AFTER))),
                         ]),
@@ -235,7 +234,7 @@ class Manage
                 ->legend(new Legend(__('Tags')))
                 ->fields([
                     (new Para())->items([
-                        (new Checkbox('pb_tags', (bool) $settings->tags))
+                        (new Checkbox('pb_tags', $settings->getBool('tags', false)))
                             ->value(1)
                             ->label((new Label(__('List tags as hashtags'), Label::INSIDE_TEXT_AFTER))),
                     ]),
@@ -251,7 +250,7 @@ class Manage
                 ->legend(new Legend(__('Categories')))
                 ->fields([
                     (new Para())->items([
-                        (new Checkbox('pb_cats', (bool) $settings->cats))
+                        (new Checkbox('pb_cats', $settings->getBool('cats', false)))
                             ->value(1)
                             ->label((new Label(__('List the names of the categories as hashtags'), Label::INSIDE_TEXT_AFTER))),
                     ]),
