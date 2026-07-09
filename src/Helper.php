@@ -204,7 +204,7 @@ class Helper
                     }
 
                     // Add URL
-                    $post_url = is_string($post_url = $rs->getURL()) ? $post_url : '';
+                    $post_url = $rs->getURL();
                     if ($post_url === '') {
                         continue;
                     }
@@ -214,7 +214,7 @@ class Helper
                     $link_facet = [
                         'index' => [
                             'byteStart' => $start,
-                            'byteEnd'   => $start + strlen($post_url),
+                            'byteEnd'   => $start + strlen((string) $post_url),
                         ],
                         'features' => [
                             [
