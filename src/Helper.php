@@ -380,7 +380,7 @@ class Helper
         }
 
         $response = curl_exec($curl);
-        if ($response === false || !is_string($response)) {
+        if ($response === false || !is_string($response) || $response === '') {
             return null;
         }
 
