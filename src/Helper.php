@@ -52,7 +52,11 @@ class Helper
         $only_cat    = $settings->getBool('only_cat', false);
         $only_cat_id = $settings->getInt('only_cat_id', false);
 
-        if ($instance === '' || $account === '' || $token === '' || $ids === []) {
+        if ($instance   === ''
+            || $account === ''
+            || $token   === ''
+            || $ids     === []
+        ) {
             return '';
         }
 
@@ -119,7 +123,10 @@ class Helper
                 $rs->extend(Post::class);
                 while ($rs->fetch()) {
                     $cat_id = $rs->intField('cat_id');
-                    if ($ignore_category === false && $only_cat && $cat_id !== $only_cat_id) {
+                    if ($ignore_category === false
+                        && $only_cat
+                        && $cat_id !== $only_cat_id
+                    ) {
                         // We do not ignore category and
                         // the article's category isn't the only one that needs to be taken into account
                         continue;
@@ -380,7 +387,10 @@ class Helper
         }
 
         $response = curl_exec($curl);
-        if ($response === false || !is_string($response) || $response === '') {
+        if ($response === false
+            || !is_string($response)
+            || $response === ''
+        ) {
             return null;
         }
 
@@ -534,7 +544,10 @@ class Helper
         }
 
         $blob_resp = json_decode($response, true);
-        if (is_array($blob_resp) && isset($blob_resp['blob']) && is_string($blob_resp['blob'])) {
+        if (is_array($blob_resp)
+            && isset($blob_resp['blob'])
+            && is_string($blob_resp['blob'])
+        ) {
             return $blob_resp['blob'];
         }
 
