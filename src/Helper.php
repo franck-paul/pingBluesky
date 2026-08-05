@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\pingBluesky;
 
+use ArrayObject;
 use DOMDocument;
 use DOMXPath;
 use Dotclear\App;
@@ -27,10 +28,10 @@ class Helper
     /**
      * Ping Bluesky server
      *
-     * @param      BlogInterface        $blog   The blog
-     * @param      array<int>           $ids    The identifiers
+     * @param      BlogInterface                            $blog   The blog
+     * @param      array<int>|ArrayObject<array-key, int>   $ids    The identifiers
      */
-    public static function ping(BlogInterface $blog, array $ids, bool $ignore_category = false): string
+    public static function ping(BlogInterface $blog, array|ArrayObject $ids, bool $ignore_category = false): string
     {
         $settings = My::settings();
         if (!$settings->getBool('active')) {
@@ -51,6 +52,10 @@ class Helper
         $catsmode    = $settings->getInt('cats_mode', false) ?: My::REFS_MODE_CAMELCASE;
         $only_cat    = $settings->getBool('only_cat', false);
         $only_cat_id = $settings->getInt('only_cat_id', false);
+
+        if ($ids instanceof ArrayObject) {
+            $ids = $ids->getArrayCopy();
+        }
 
         if ($instance   === ''
             || $account === ''
