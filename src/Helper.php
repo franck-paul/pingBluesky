@@ -127,6 +127,11 @@ class Helper
                 $rs = $blog->getPosts(['post_id' => $ids]);
                 $rs->extend(Post::class);
                 while ($rs->fetch()) {
+                    // Exclude password protected entries
+                    if ($rs->strField('post_password') !== '') {
+                        continue;
+                    }
+
                     $cat_id = $rs->intField('cat_id');
                     if ($ignore_category === false
                         && $only_cat
