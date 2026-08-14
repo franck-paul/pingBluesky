@@ -18,9 +18,9 @@ if (isset($this) && is_object($this) && method_exists($this, 'registerModule') &
         'Ping Bluesky',
         'Ping Bluesky',
         'Franck Paul',
-        '4.0.2',
+        '4.1',
         [
-            'date'        => '2026-08-05T10:13:55+0200',
+            'date'        => '2026-08-14T11:29:50+0200',
             'requires'    => [['core', '2.39']],
             'type'        => 'plugin',
             'permissions' => 'My',
