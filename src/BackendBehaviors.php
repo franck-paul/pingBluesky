@@ -22,13 +22,13 @@ use Dotclear\Plugin\pages\BackendActions as PagesBackendActions;
 
 class BackendBehaviors
 {
-    public static function adminPostsActions(ActionsPosts $ap): string
+    public static function adminPostsActions(ActionsPosts $actionsPosts): string
     {
         // Add menuitem in actions dropdown list
         if (App::auth()->check(App::auth()->makePermissions([
             App::auth()::PERMISSION_CONTENT_ADMIN,
         ]), App::blog()->id())) {
-            $ap->addAction(
+            $actionsPosts->addAction(
                 [__('Bluesky') => [__('Ping Bluesky') => 'pingBluesky']],
                 self::adminPingBluesky(...)
             );
@@ -37,13 +37,13 @@ class BackendBehaviors
         return '';
     }
 
-    public static function adminPagesActions(PagesBackendActions $ap): string
+    public static function adminPagesActions(PagesBackendActions $pagesBackendActions): string
     {
         // Add menuitem in actions dropdown list
         if (App::auth()->check(App::auth()->makePermissions([
             App::auth()::PERMISSION_CONTENT_ADMIN,
         ]), App::blog()->id())) {
-            $ap->addAction(
+            $pagesBackendActions->addAction(
                 [__('Bluesky') => [__('Ping Bluesky') => 'pingBluesky']],
                 self::adminPingBluesky(...)
             );
@@ -53,12 +53,12 @@ class BackendBehaviors
     }
 
     /**
-     * @param      ActionsPosts|PagesBackendActions     $ap     Actions
-     * @param      ArrayObject<string, mixed>           $post   The post
+     * @param      ActionsPosts|PagesBackendActions     $actionsPostsPages     Actions
+     * @param      ArrayObject<string, mixed>           $arrayObject   The post
      */
-    public static function adminPingBluesky(ActionsPosts|PagesBackendActions $ap, ArrayObject $post): void
+    public static function adminPingBluesky(ActionsPosts|PagesBackendActions $actionsPostsPages, ArrayObject $arrayObject): void
     {
-        $rs = $ap->getRS();
+        $rs = $actionsPostsPages->getRS();
         if ($rs->rows() !== []) {
             $ids = [];
             while ($rs->fetch()) {
@@ -75,9 +75,9 @@ class BackendBehaviors
                 App::backend()->notices()->addSuccessNotice(__('All entries have been ping to Bluesky.'));
             }
 
-            $ap->redirect(true);
+            $actionsPostsPages->redirect(true);
         } else {
-            $ap->redirect();
+            $actionsPostsPages->redirect();
         }
     }
 }

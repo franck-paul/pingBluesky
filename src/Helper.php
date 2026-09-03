@@ -405,22 +405,22 @@ class Helper
         }
 
         // Create a new DOMDocument
-        $doc = new DOMDocument();
+        $domDocument = new DOMDocument();
 
         // Suppress errors for invalid HTML, if needed
         libxml_use_internal_errors(true);
 
         // Load the HTML from the URL
-        $doc->loadHTML($response);
+        $domDocument->loadHTML($response);
 
         // Restore error handling
         libxml_use_internal_errors(false);
 
         // Create a new DOMXPath object for querying the document
-        $xpath = new DOMXPath($doc);
+        $domxPath = new DOMXPath($domDocument);
 
         // Query for "og:title" and "og:description" meta tags
-        $title_tag = $xpath->query('//meta[@property="og:title"]/@content');
+        $title_tag = $domxPath->query('//meta[@property="og:title"]/@content');
         if ($title_tag !== false && $title_tag->length > 0) {
             foreach ($title_tag as $node) {
                 $title = $node->nodeValue ?? '';
@@ -438,7 +438,7 @@ class Helper
             return null;
         }
 
-        $description_tag = $xpath->query('//meta[@property="og:description"]/@content');
+        $description_tag = $domxPath->query('//meta[@property="og:description"]/@content');
         if ($description_tag !== false && $description_tag->length > 0) {
             foreach ($description_tag as $node) {
                 $description = $node->nodeValue ?? '';
@@ -464,7 +464,7 @@ class Helper
         ];
 
         // If there is an "og:image" meta tag, fetch and upload that image
-        $image_tag = $xpath->query('//meta[@property="og:image"]/@content');
+        $image_tag = $domxPath->query('//meta[@property="og:image"]/@content');
         if ($image_tag !== false && $image_tag->length > 0) {
             foreach ($image_tag as $node) {
                 $img_url = $node->nodeValue ?? '';
