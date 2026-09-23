@@ -296,7 +296,7 @@ class Helper
                             'Authorization: Bearer ' . $access_jwt,
                         ],
                     ]);
-                    $response = curl_exec($curl);
+                    curl_exec($curl);
                 }
             } catch (Exception) {
             }
