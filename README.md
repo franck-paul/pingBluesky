@@ -3,7 +3,7 @@
 [![Release](https://img.shields.io/github/v/release/franck-paul/pingBluesky)](https://github.com/franck-paul/pingBluesky/releases)
 [![Date](https://img.shields.io/github/release-date/franck-paul/pingBluesky)](https://github.com/franck-paul/pingBluesky/releases)
 [![Issues](https://img.shields.io/github/issues/franck-paul/pingBluesky)](https://github.com/franck-paul/pingBluesky/issues)
-[![License](https://img.shields.io/github/license/franck-paul/pingBluesky)](https://github.com/franck-paul/pingBluesky/blob/master/LICENSE)
+[![License](https://img.shields.io/github/license/franck-paul/pingBluesky)](https://github.com/franck-paul/pingBluesky/blob/main/LICENSE)
 
 ## Settings
 
