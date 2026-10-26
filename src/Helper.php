@@ -66,11 +66,11 @@ class Helper
         }
 
         // Prepare instance URI
-        if (!parse_url((string) $instance, PHP_URL_HOST)) {
-            $instance = 'https://' . ltrim((string) $instance, '/');
+        if (!parse_url($instance, PHP_URL_HOST)) {
+            $instance = 'https://' . ltrim($instance, '/');
         }
 
-        $instance = rtrim((string) $instance, '/');
+        $instance = rtrim($instance, '/');
 
         // First step, create a new session
         $payload = [
@@ -231,7 +231,7 @@ class Helper
                     $link_facet = [
                         'index' => [
                             'byteStart' => $start,
-                            'byteEnd'   => $start + strlen((string) $post_url),
+                            'byteEnd'   => $start + strlen($post_url),
                         ],
                         'features' => [
                             [
@@ -321,7 +321,7 @@ class Helper
             return $reference;
         }
 
-        if (strtoupper((string) $ref) === $ref) {
+        if (strtoupper($ref) === $ref) {
             // Don't touch all uppercased tag
             return $ref;
         }
