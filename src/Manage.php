@@ -136,7 +136,7 @@ class Manage
 
         $i = 0;
         foreach ($references_mode_options_tags as $k => $v) {
-            $tagsmodes[] = (new Radio(['pb_tags_mode', 'pb_tags_mode-' . $i], $tags_mode == $k))
+            $tagsmodes[] = (new Radio(['pb_tags_mode', 'pb_tags_mode-' . $i], $tags_mode === $k))
                     ->value($k)
                     ->label((new Label($v, Label::INSIDE_TEXT_AFTER)));
             ++$i;
@@ -144,7 +144,7 @@ class Manage
 
         $i = 0;
         foreach ($references_mode_options_cats as $k => $v) {
-            $catsmodes[] = (new Radio(['pb_cats_mode', 'pb_cats_mode-' . $i], $cats_mode == $k))
+            $catsmodes[] = (new Radio(['pb_cats_mode', 'pb_cats_mode-' . $i], $cats_mode === $k))
                     ->value($k)
                     ->label((new Label($v, Label::INSIDE_TEXT_AFTER)));
             ++$i;
